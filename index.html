@@ -31,6 +31,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--t1
 .btn-secondary{background:var(--s3);color:var(--t1);border:1px solid var(--bd)}.btn-secondary:hover{background:var(--bd)}
 .btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--bd)}.btn-ghost:hover{background:var(--s2);color:var(--t1)}
 .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,81,73,.25)}.btn-danger:hover{background:var(--red);color:#fff}
+.btn-excel{background:rgba(33,197,94,.13);color:#21c55e;border:1px solid rgba(33,197,94,.28)}.btn-excel:hover{background:#21c55e;color:#fff}
 .btn-sm{padding:4px 9px;font-size:11.5px}
 .btn-plus{width:28px;height:28px;min-width:28px;border-radius:6px;background:var(--s3);border:1px solid var(--bd);color:var(--acc);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;line-height:1}
 .btn-plus:hover{background:var(--acc-bg);border-color:var(--acc)}
@@ -130,14 +131,15 @@ textarea{resize:vertical;min-height:76px;line-height:1.55}
     <div class="nav-item active" id="nav-dashboard" onclick="nav('dashboard')"><span>📊</span> Dashboard</div>
     <div class="sb-sec">Quản lý</div>
     <div class="nav-item" id="nav-employees" onclick="nav('employees')"><span>👥</span> Nhân sự</div>
-    <div class="sb-sec">Xuất dữ liệu</div>
-    <div class="nav-item" onclick="exportExcel()" style="color:var(--green)"><span>📥</span> Export Excel</div>
   </nav>
 </div>
 <div class="main">
   <div class="topbar">
     <div><div class="tb-title" id="tb-title">Dashboard</div><div class="tb-sub" id="tb-sub"></div></div>
-    <div id="tb-actions"></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn btn-excel" onclick="exportExcel()">📥 Xuất Excel</button>
+      <div id="tb-actions"></div>
+    </div>
   </div>
   <div class="content" id="app"></div>
 </div>
@@ -468,92 +470,99 @@ function delRev(empId,revId){
 }
 
 // ── EXPORT EXCEL ───────────────────────────────────────────────────────────────
-function exportExcel() {
-  if (!D.employees.length) { alert('Chưa có dữ liệu để xuất.'); return; }
-
+function exportExcel(){
   const wb = XLSX.utils.book_new();
 
-  // ── Sheet 1: Danh sách nhân sự ──
-  const empHeaders = ['Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc','Thâm niên (tháng)','Lương CB hiện tại','HH / Dịch vụ TB','DT BH TB 6 tháng','Số đợt review'];
-  const empRows = D.employees.map(e => [
-    e.name, e.branch||'', e.position||'', e.dept||'', e.shift||'',
-    e.seniorityMonths||0,
-    latestBasic(e), latestComm(e), latestSales(e),
-    e.reviews?.length||0
-  ]);
-  const ws1 = XLSX.utils.aoa_to_sheet([empHeaders, ...empRows]);
-  ws1['!cols'] = [22,12,14,12,12,8,16,16,18,8].map(w=>({wch:w}));
-  styleHeader(ws1, empHeaders.length);
-  XLSX.utils.book_append_sheet(wb, ws1, 'Nhân sự');
+  // ── Sheet 1: Tổng hợp nhân sự ──
+  const sumHeader = ['Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc','Thâm niên (tháng)','Số đợt review','Lương CB mới nhất (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)'];
+  const sumRows = D.employees.map(e=>{
+    const r = latestRev(e);
+    return [
+      e.name||'',
+      e.branch||'',
+      e.position||'',
+      e.dept||'',
+      e.shift||'',
+      e.seniorityMonths||0,
+      e.reviews?.length||0,
+      r?(r.approvedSalary||r.currentBaseSalary||0):0,
+      r?(r.avgCommission||0):0,
+      r?(r.avgSales6m||0):0
+    ];
+  });
+  const wsSum = XLSX.utils.aoa_to_sheet([sumHeader,...sumRows]);
+  // Column widths
+  wsSum['!cols'] = [22,14,14,14,14,10,10,18,18,18].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsSum, 'Tổng hợp nhân sự');
 
-  // ── Sheet 2: Lịch sử review ──
-  const revHeaders = [
-    'Họ & Tên','Cơ sở','Chức danh','Ngày review',
-    'Lương CB hiện tại','HH / Dịch vụ TB','DT BH TB 6 tháng',
-    'Đề xuất - Nhân viên','Đề xuất - Quản lý','Đề xuất - Ban VH',
-    'Lương được duyệt','Ngày duyệt',
-    'Chênh lệch (đã duyệt - CB cũ)',
-    'Ưu điểm','Nhược điểm','JTBD Quản lý','Mong muốn NV','Kế hoạch hành động'
+  // ── Sheet 2: Chi tiết đợt review ──
+  const revHeader = [
+    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca',
+    'Ngày review','Lương CB hiện tại (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)',
+    'Đề xuất - NV (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
+    'Lương được duyệt (đ)','Ngày duyệt',
+    '✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'
   ];
-  const revData = [];
-  D.employees.forEach(e => {
-    (e.reviews||[]).sort((a,b)=>new Date(a.reviewDate)-new Date(b.reviewDate)).forEach(r => {
-      const raise = (r.approvedSalary && r.currentBaseSalary) ? r.approvedSalary - r.currentBaseSalary : '';
-      revData.push([
-        e.name, e.branch||'', e.position||'', r.reviewDate||'',
-        r.currentBaseSalary||0, r.avgCommission||0, r.avgSales6m||0,
-        r.empProposed||0, r.mgrProposed||0, r.opsProposed||0,
-        r.approvedSalary||0, r.approvedDate||'', raise,
-        r.notes?.pros||'', r.notes?.cons||'',
-        r.notes?.managerJTBD||'', r.notes?.employeeWish||'', r.notes?.actionPlan||''
+  const revRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      revRows.push([
+        e.name||'',
+        e.branch||'',
+        e.position||'',
+        e.dept||'',
+        e.shift||'',
+        r.reviewDate||'',
+        r.currentBaseSalary||0,
+        r.avgCommission||0,
+        r.avgSales6m||0,
+        r.empProposed||0,
+        r.mgrProposed||0,
+        r.opsProposed||0,
+        r.approvedSalary||0,
+        r.approvedDate||'',
+        n.pros||'',
+        n.cons||'',
+        n.managerJTBD||'',
+        n.employeeWish||'',
+        n.actionPlan||''
       ]);
     });
   });
-  const ws2 = XLSX.utils.aoa_to_sheet([revHeaders, ...revData]);
-  ws2['!cols'] = [22,12,14,12,16,16,18,16,16,16,16,12,14,30,30,30,30,40].map(w=>({wch:w}));
-  styleHeader(ws2, revHeaders.length);
-  XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử review');
+  const wsRev = XLSX.utils.aoa_to_sheet([revHeader,...revRows]);
+  wsRev['!cols'] = [22,14,14,14,12,14,18,16,18,18,18,16,18,14,40,40,40,40,50].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsRev, 'Chi tiết review');
 
-  // ── Sheet 3: Thống kê theo cơ sở ──
-  const byBranch = {};
-  D.employees.forEach(e => {
-    const b = e.branch||'Không rõ';
-    if (!byBranch[b]) byBranch[b] = { count:0, basic:0, comm:0, sales:0 };
-    byBranch[b].count++;
-    byBranch[b].basic += latestBasic(e);
-    byBranch[b].comm  += latestComm(e);
-    byBranch[b].sales += latestSales(e);
+  // ── Sheet 3: Ưu nhược điểm tổng hợp ──
+  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
+  const noteRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      if(n.pros||n.cons||n.managerJTBD||n.employeeWish||n.actionPlan){
+        noteRows.push([
+          e.name||'',
+          e.branch||'',
+          e.position||'',
+          r.reviewDate||'',
+          n.pros||'',
+          n.cons||'',
+          n.managerJTBD||'',
+          n.employeeWish||'',
+          n.actionPlan||''
+        ]);
+      }
+    });
   });
-  const statHeaders = ['Cơ sở','Số nhân sự','Tổng lương CB','Tổng HH/DV','Tổng quỹ lương','DT BH TB 6th','% / Doanh thu'];
-  const rev = D.company.revenue||0;
-  const statRows = Object.entries(byBranch).map(([name, d]) => [
-    name, d.count, d.basic, d.comm, d.basic+d.comm, d.sales,
-    rev > 0 ? +((d.basic+d.comm)/rev*100).toFixed(1) : 'N/A'
-  ]);
-  const totalBasic = D.employees.reduce((s,e)=>s+latestBasic(e),0);
-  const totalComm  = D.employees.reduce((s,e)=>s+latestComm(e),0);
-  const totalSales = D.employees.reduce((s,e)=>s+latestSales(e),0);
-  statRows.push(['TỔNG', D.employees.length, totalBasic, totalComm, totalBasic+totalComm, totalSales, rev>0?+((totalBasic+totalComm)/rev*100).toFixed(1):'N/A']);
-  const ws3 = XLSX.utils.aoa_to_sheet([statHeaders, ...statRows]);
-  ws3['!cols'] = [14,10,16,16,16,18,12].map(w=>({wch:w}));
-  styleHeader(ws3, statHeaders.length);
-  XLSX.utils.book_append_sheet(wb, ws3, 'Thống kê cơ sở');
+  const wsNote = XLSX.utils.aoa_to_sheet([noteHeader,...noteRows]);
+  wsNote['!cols'] = [22,14,14,14,50,50,50,50,60].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsNote, 'Ưu nhược điểm');
 
-  // ── Download ──
   const date = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `HR_Review_${date}.xlsx`);
-}
-
-function styleHeader(ws, colCount) {
-  for (let c = 0; c < colCount; c++) {
-    const addr = XLSX.utils.encode_cell({ r: 0, c });
-    if (!ws[addr]) continue;
-    ws[addr].s = {
-      font: { bold: true, color: { rgb: '0D1117' } },
-      fill: { fgColor: { rgb: 'D4A017' } },
-      alignment: { horizontal: 'center', wrapText: true }
-    };
-  }
 }
 
 render();

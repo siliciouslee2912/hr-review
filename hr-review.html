@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Salary Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#0d1117;--s1:#161b22;--s2:#21262d;--s3:#2d333b;--bd:#30363d;--t1:#e6edf3;--t2:#8b949e;--t3:#6e7681;--acc:#d4a017;--acc-bg:rgba(212,160,23,.13);--blue:#388bfd;--blue-bg:rgba(56,139,253,.13);--green:#3fb950;--green-bg:rgba(63,185,80,.13);--red:#f85149;--red-bg:rgba(248,81,73,.13);--ora:#e8823a;--ora-bg:rgba(232,130,58,.13);--pur:#bc8cff;--pur-bg:rgba(188,140,255,.13);--teal:#39d0d8;--teal-bg:rgba(57,208,216,.13)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;display:flex}
+.sidebar{width:220px;min-height:100vh;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:20}
+.sb-brand{padding:20px 16px 16px;border-bottom:1px solid var(--bd)}
+.sb-logo{width:36px;height:36px;background:var(--acc);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:9px}
+.sb-name{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.sb-sub{font-size:10.5px;color:var(--t3);margin-top:2px}
+.sb-nav{padding:10px 7px;flex:1}
+.sb-sec{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);padding:10px 11px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:7px;cursor:pointer;color:var(--t2);font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:var(--s2);color:var(--t1)}
+.nav-item.active{background:var(--acc-bg);color:var(--acc)}
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column}
+.topbar{padding:13px 26px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--s1);position:sticky;top:0;z-index:10}
+.tb-title{font-size:15px;font-weight:800}
+.tb-sub{font-size:11.5px;color:var(--t3);margin-top:1px}
+.content{padding:24px 26px;flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.btn-primary{background:var(--acc);color:#0d1117}.btn-primary:hover{background:#e8b420}
+.btn-secondary{background:var(--s3);color:var(--t1);border:1px solid var(--bd)}.btn-secondary:hover{background:var(--bd)}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--bd)}.btn-ghost:hover{background:var(--s2);color:var(--t1)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,81,73,.25)}.btn-danger:hover{background:var(--red);color:#fff}
+.btn-excel{background:rgba(33,197,94,.13);color:#21c55e;border:1px solid rgba(33,197,94,.28)}.btn-excel:hover{background:#21c55e;color:#fff}
+.btn-sm{padding:4px 9px;font-size:11.5px}
+.btn-plus{width:28px;height:28px;min-width:28px;border-radius:6px;background:var(--s3);border:1px solid var(--bd);color:var(--acc);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;line-height:1}
+.btn-plus:hover{background:var(--acc-bg);border-color:var(--acc)}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:18px 20px}
+.card-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 18px}
+.stat-lbl{font-size:11px;color:var(--t3);font-weight:600;margin-bottom:7px}
+.stat-val{font-size:21px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.stat-sub{font-size:10.5px;color:var(--t3);margin-top:3px}
+.c-acc{color:var(--acc)}.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-red{color:var(--red)}.c-pur{color:var(--pur)}.c-teal{color:var(--teal)}.c-ora{color:var(--ora)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{text-align:left;padding:9px 13px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);border-bottom:1px solid var(--bd)}
+tbody tr{border-bottom:1px solid var(--bd);transition:background .1s}
+tbody tr:hover{background:var(--s2)}
+tbody tr:last-child{border-bottom:none}
+td{padding:11px 13px}
+.td2{color:var(--t2);font-size:12px}
+.tr-sum{background:var(--s2)!important}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:10.5px;font-weight:700}
+.b-blue{background:var(--blue-bg);color:var(--blue)}.b-green{background:var(--green-bg);color:var(--green)}
+.b-acc{background:var(--acc-bg);color:var(--acc)}.b-pur{background:var(--pur-bg);color:var(--pur)}
+.b-ora{background:var(--ora-bg);color:var(--ora)}.b-teal{background:var(--teal-bg);color:var(--teal)}
+.b-red{background:var(--red-bg);color:var(--red)}.b-gray{background:var(--s3);color:var(--t2)}
+.money{font-family:'JetBrains Mono',monospace;font-weight:600}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;z-index:100;padding:36px 16px;overflow-y:auto}
+.modal{background:var(--s1);border:1px solid var(--bd);border-radius:12px;width:100%;max-width:680px;animation:mIn .18s ease}
+@keyframes mIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.mhd{padding:18px 22px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.mhd-title{font-size:15px;font-weight:800}
+.m-close{width:26px;height:26px;border-radius:6px;background:var(--s3);border:none;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s}
+.m-close:hover{background:var(--red-bg);color:var(--red)}
+.mbody{padding:18px 22px}.mfoot{padding:14px 22px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.fsec{margin-bottom:18px}
+.fsec-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--acc);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--bd)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+label{font-size:11.5px;font-weight:700;color:var(--t2)}
+input,select,textarea{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px 11px;color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+input[type=number]{font-family:'JetBrains Mono',monospace}
+select option{background:var(--s2)}
+textarea{resize:vertical;min-height:76px;line-height:1.55}
+.hint{font-size:10.5px;color:var(--t3)}
+.sel-row{display:flex;gap:6px;align-items:flex-end}
+.sel-row select{flex:1}
+.emp-hd{display:flex;align-items:flex-start;gap:18px;margin-bottom:20px}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#0d1117;flex-shrink:0}
+.emp-meta{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.meta-i{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t2)}
+.rev-card{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.rev-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.rev-date{font-size:13px;font-weight:700;color:var(--acc)}
+.sal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sal-item{background:var(--s3);border-radius:8px;padding:9px 11px}
+.sal-lbl{font-size:9.5px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sal-val{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600}
+.sal-approved{background:var(--green-bg);border:1px solid rgba(63,185,80,.25);border-radius:8px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sal-app-lbl{font-size:11.5px;color:var(--green);font-weight:700}
+.sal-app-val{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:var(--green)}
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.note-item{background:var(--s3);border-radius:8px;padding:9px 11px}.note-item.full{grid-column:1/-1}
+.note-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.note-txt{font-size:12.5px;color:var(--t1);line-height:1.55}
+.searchbar{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin-bottom:14px}
+.searchbar input{background:none;border:none;padding:0;font-size:13px;flex:1;color:var(--t1)}
+.searchbar input:focus{border:none;outline:none}
+.rev-bar{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.rev-bar label{font-size:12.5px;font-weight:700;color:var(--t2);white-space:nowrap}
+.rbar-bg{height:7px;background:var(--s3);border-radius:4px;overflow:hidden;margin-top:6px}
+.rbar-fill{height:100%;border-radius:4px;transition:width .5s}
+.rbar-labels{display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--t3)}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.chart-box{position:relative;height:230px}
+.empty{text-align:center;padding:56px 20px;color:var(--t3)}
+.empty-ico{font-size:38px;margin-bottom:10px}
+.empty-txt{font-size:13.5px;margin-bottom:14px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:6px;background:var(--s2);border:1px solid var(--bd);color:var(--t2);font-size:12.5px;cursor:pointer;margin-bottom:18px;font-family:inherit;font-weight:500;transition:all .15s}
+.back-btn:hover{color:var(--t1);background:var(--s3)}
+.row-actions{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.flex-gap{display:flex;gap:6px}
+.tr-click:hover td:first-child{color:var(--acc)}
+.mini-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mini-box{background:var(--s2);border-radius:8px;padding:11px 14px}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">💼</div>
+    <div class="sb-name">HR Review</div>
+    <div class="sb-sub">Hệ thống review lương</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Tổng quan</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="nav('dashboard')"><span>📊</span> Dashboard</div>
+    <div class="sb-sec">Quản lý</div>
+    <div class="nav-item" id="nav-employees" onclick="nav('employees')"><span>👥</span> Nhân sự</div>
+  </nav>
+</div>
+<div class="main">
+  <div class="topbar">
+    <div><div class="tb-title" id="tb-title">Dashboard</div><div class="tb-sub" id="tb-sub"></div></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn btn-excel" onclick="exportExcel()">📥 Xuất Excel</button>
+      <div id="tb-actions"></div>
+    </div>
+  </div>
+  <div class="content" id="app"></div>
+</div>
+<div id="modal-root"></div>
+
+<script>
+// ── SEED DATA ──────────────────────────────────────────────────────────────────
+const SEED = {"employees":[{"id":"emp_0001","name":"Linh Chi","branch":"Quan Hoa","position":"HTQL","dept":"Vận hành","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0001","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề xuất sắc nhất tại spa. Lượt khách triệt lông đặt nhiều nhất (ít nhất 1 ngày 1 khách đặt cả làm mặt + triệt lông). Luôn có xu hướng học thêm về sp và da. Thái độ học tập cao.","cons":"Ko đến sớm 10p, đi hơi sát giờ làm việc.","managerJTBD":"Lương thấp so với thâm niên, khối lượng công việc, tay nghề. Có những tháng làm HTQL mà lương chưa được 10tr trong khi làm 11 tiếng 1 ngày.","employeeWish":"","actionPlan":""}}]},{"id":"emp_0002","name":"Hồng Anh","branch":"Quan Hoa","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0002","reviewDate":"2026-03-29","currentBaseSalary":5000000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề tốt, nắm rõ hầu hết các dịch vụ. Thái độ làm việc tích cực, hỗ trợ tại quầy. Gần đây thái độ hợp tác tốt, trong 4 tháng gần nhất ko có feedback. Triệt lông tốt hơn dịch vụ.","cons":"Cần tư vấn tốt hơn về các dịch vụ chuyên sâu. Chuyên viên chưa từng được làm dịch vụ chuyên sâu -> ko biết tư vấn.","managerJTBD":"","employeeWish":"","actionPlan":"Giao cho Hoa: lên plan phát triển năng lực cho HA - check in với HA."}}]},{"id":"emp_0003","name":"Lan Anh","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0003","reviewDate":"2026-03-29","currentBaseSalary":3295000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề tốt. Thái độ vui vẻ hoà đồng, teamwork tốt. Đang vừa học vừa làm (1 tuần nghỉ 1 lần) - ko bị ảnh hưởng tới công việc. Nặn mụn tốt, triệt lông tốt, khách đặt nhiều. Tư vấn được sp cơ bản.","cons":"Cần tư vấn được các sản phẩm chuyên sâu hơn dạng điều trị.","managerJTBD":"","employeeWish":"","actionPlan":"QL đề xuất lên Chuyên viên."}}]},{"id":"emp_0004","name":"Thu Hương","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":24,"reviews":[{"id":"rev_0004","reviewDate":"2026-03-29","currentBaseSalary":3200000,"avgCommission":0,"avgSales6m":0,"empProposed":6000000,"mgrProposed":5500000,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nặn mụn - triệt lông - tay nghề tốt. Ko có khách feedback trong 4-5 tháng. Thái độ tích cực vui vẻ hoà đồng. Hỗ trợ check page - thanh toán - teamwork trong công việc. Đã tham gia Consultant. Tư vấn sản phẩm ok.","cons":"Về dịch vụ tư vấn hơi yếu. Chưa tự tin về tư vấn dịch vụ.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0005","name":"My","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":12,"reviews":[{"id":"rev_0005","reviewDate":"2026-03-29","currentBaseSalary":3295000,"avgCommission":0,"avgSales6m":0,"empProposed":5000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nặn tốt, ko có feedback. Có sự phát triển về việc học sản phẩm. % bán sp ổn định. Bán sp được nhiều.","cons":"Ko triệt lông, chỉ nặn. Chưa có nhiều khách đặt. Ko triệt nên khó tăng % cao như các nhân sự khác.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0006","name":"Quỳnh Anh","branch":"Hà Đông","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":36,"reviews":[{"id":"rev_0006","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":12000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nắm rõ cấu trúc da, tư vấn khách tốt. Có tay nghề chắc nhất trong cơ sở. Chủ động chuẩn bị mà ko cần QL nhắc. Có khả năng training nhân viên mới. Chủ động hỗ trợ team, tăng ca, chia sẻ kinh nghiệm. Giao tiếp tốt, tư vấn tự nhiên. Nhiều khách quen book, lượt book cao nhất.","cons":"Chưa tư vấn được dịch vụ chuyên sâu. Có bị feedback để lại đầu trắng. Lâu lâu đi muộn 2 lần/tháng.","managerJTBD":"","employeeWish":"","actionPlan":"Gọi điện, đưa ra tình huống cho QA - coach với sếp về kỹ năng xử lý tình huống khách hàng."}}]},{"id":"emp_0007","name":"Hạnh","branch":"Hà Đông","position":"KTV","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0007","reviewDate":"2026-03-29","currentBaseSalary":4530000,"avgCommission":3450000,"avgSales6m":0,"empProposed":9500000,"mgrProposed":9000000,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"PC xăng xe, tiền dịch vụ. Tổng thu nhập trung bình: 8.2tr (bao gồm cả hoa hồng hỗ trợ QH).","cons":"Đi muộn.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0008","name":"Tú Anh","branch":"Hà Đông","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0008","reviewDate":"2026-03-29","currentBaseSalary":4532000,"avgCommission":0,"avgSales6m":0,"empProposed":10000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Đã học tại SCA. Tay nghề sát với nhu cầu và quy trình. Chủ động ko cần nhắc, hỗ trợ team. Sẵn sàng tăng ca, trách nhiệm cao. Cẩn thận, chỉn chu. Nặn mụn tay tốt. Giao tiếp nhẹ nhàng, lịch sự, khách book nhiều. Siêu chủ động.","cons":"","managerJTBD":"","employeeWish":"","actionPlan":"Dự kiến lên ca full từ tháng 7/2025."}}]},{"id":"emp_0009","name":"Khánh Hà","branch":"TXS","position":"Phó QL","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0009","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":7000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Có ý thức chủ động, bao quát. Nền tảng chuyên môn tốt. Thẳng thắn, có tư duy phát triển tốt.","cons":"Mức lương so với chức danh đang hơi thấp.","managerJTBD":"QL chính muốn Khánh Hà là cánh tay phải. Tập trung vào vận hành & doanh thu. Thời gian tới Hồng sẽ tập trung phát triển Khánh Hà.","employeeWish":"","actionPlan":"Cân nhắc xem lại vai trò trong công việc."}}]},{"id":"emp_0010","name":"Nguyễn Thị Ngọc Anh","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0010","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Có tính học hỏi cao, nửa đêm vẫn đặt câu hỏi. Tốc độ phát triển nhanh. Trong đội ngũ tư vấn viên. Học ở SCA + 3am. Kê đơn, tư vấn tốt.","cons":"Nhút nhát, bị sợ.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0011","name":"Ánh Linh","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0011","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tự tin.","cons":"Chưa thấy mục tiêu rõ ràng.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0012","name":"Hoa Lily","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0012","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":6000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Khách book nhiều. Tăng vì tay nghề giỏi + gắn bó lâu năm.","cons":"Nhiều yếu tố gia đình (giới hạn phát triển). Tư vấn sản phẩm không tốt.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0013","name":"Ngân","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0013","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Chăm chỉ, ngoan. Gần đây khách book cao, tay nghề ổn.","cons":"Ko có tư duy phát triển. Kỷ luật kém. Ko có kiến thức chuyên môn về da. Kỹ năng xử lý tình huống kém. Kỹ năng giao tiếp / chuyên môn yếu. Làm cho qua ngày.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0014","name":"Huyền","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0014","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Cựu học viên của SCA. Có triển vọng về tay nghề dù mới vào. Cao hơn so với Ngân.","cons":"Cần nâng cấp kỹ năng xử lý tình huống, tư vấn.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0015","name":"Đinh Ngọc Oanh","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0015","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tự tin. CSKH tốt.","cons":"Kiến thức chuyên môn yếu (ko upsale được dịch vụ và sp). Tay nghề cần phát triển.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0016","name":"Nguyễn Kim Oanh","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0016","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Cựu học viên. Có tư duy phát triển.","cons":"Kỹ thuật + chuyên môn chưa cao.","managerJTBD":"","employeeWish":"","actionPlan":""}}]}],"company":{"revenue":0},"nid":200,"options":{"branches":["Quan Hoa","Hà Đông","TXS"],"positions":["KTV","Chuyên viên","HTQL","Phó QL","Quản lý"],"depts":["Kinh doanh","Vận hành","Marketing","Kế toán"],"shifts":["Ca chiều","Ca full","Ca sáng","Linh hoạt"]}};
+
+// ── STORE ──────────────────────────────────────────────────────────────────────
+const KEY = 'hr_v3';
+let D = (() => {
+  try { const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); } catch(e){}
+  return JSON.parse(JSON.stringify(SEED));
+})();
+const save = () => localStorage.setItem(KEY, JSON.stringify(D));
+const uid = p => { const id=`${p}_${String(D.nid).padStart(4,'0')}`; D.nid++; save(); return id; };
+const opts = () => D.options || SEED.options;
+
+// ── ROUTING ────────────────────────────────────────────────────────────────────
+let view='dashboard', selEmp=null;
+function nav(v,params={}){
+  view=v; if(params.empId) selEmp=params.empId;
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  const m={dashboard:'nav-dashboard',employees:'nav-employees','emp-detail':'nav-employees'};
+  const el=document.getElementById(m[v]); if(el) el.classList.add('active');
+  render();
+}
+function render(){
+  if(view==='dashboard') renderDash();
+  else if(view==='employees') renderEmpList();
+  else if(view==='emp-detail') renderEmpDetail(selEmp);
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────────
+const fm = n => (n&&n>0)?new Intl.NumberFormat('vi-VN').format(n)+' đ':'—';
+const fms = n => {
+  if(!n||n===0) return '—';
+  if(n>=1e9) return (n/1e9).toFixed(1)+'B';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(0)+'K';
+  return String(n);
+};
+const fd = d => d?new Date(d).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+const ini = n => {if(!n) return '?'; const w=n.trim().split(' '); return w.slice(-2).map(x=>x[0]).join('').toUpperCase();};
+const sen = m => {if(!m) return '—'; const y=Math.floor(m/12),r=m%12; if(y&&r) return `${y}n ${r}th`; return y?`${y} năm`:`${m} tháng`;};
+const latestRev = e => e.reviews?.length ? [...e.reviews].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate))[0] : null;
+const latestBasic = e => { const r=latestRev(e); return r?(r.approvedSalary||r.currentBaseSalary||0):0; };
+const latestComm  = e => { const r=latestRev(e); return r?(r.avgCommission||0):0; };
+const latestSales = e => { const r=latestRev(e); return r?(r.avgSales6m||0):0; };
+const branchBadge = b => ({'Quan Hoa':'b-blue','Hà Đông':'b-acc','TXS':'b-pur'}[b]||'b-gray');
+const posBadge = p => { if(!p) return 'b-gray'; if(p.includes('QL')||p.includes('Quản')) return 'b-red'; if(p.includes('CV')||p.includes('Chuyên')) return 'b-teal'; if(p.includes('KTV')||p.includes('Kỹ')) return 'b-blue'; return 'b-gray'; };
+
+// ── CUSTOM OPTIONS ─────────────────────────────────────────────────────────────
+function addOpt(type, selId) {
+  const labels = {branches:'cơ sở',positions:'chức danh',depts:'phòng ban',shifts:'ca làm việc'};
+  const val = prompt(`Nhập tên ${labels[type]} mới:`);
+  if(!val||!val.trim()) return;
+  const v = val.trim();
+  if(!opts()[type].includes(v)) { opts()[type].push(v); save(); }
+  const sel = document.getElementById(selId);
+  if(sel) {
+    if(![...sel.options].find(o=>o.value===v)) {
+      const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o);
+    }
+    sel.value = v;
+  }
+}
+
+function selOpts(type, selId, cur='') {
+  const list = opts()[type]||[];
+  return `
+    <div class="sel-row">
+      <select id="${selId}">
+        <option value="">-- Chọn --</option>
+        ${list.map(v=>`<option value="${v}" ${v===cur?'selected':''}>${v}</option>`).join('')}
+      </select>
+      <button type="button" class="btn-plus" onclick="addOpt('${type}','${selId}')" title="Thêm mới">+</button>
+    </div>`;
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────────
+function renderDash(){
+  document.getElementById('tb-title').textContent='Dashboard';
+  document.getElementById('tb-sub').textContent='Tổng quan quỹ lương & phân tích nhân sự';
+  document.getElementById('tb-actions').innerHTML='';
+  const emps=D.employees;
+  const totalBasic=emps.reduce((s,e)=>s+latestBasic(e),0);
+  const totalComm=emps.reduce((s,e)=>s+latestComm(e),0);
+  const totalSales=emps.reduce((s,e)=>s+latestSales(e),0);
+  const totalPay=totalBasic+totalComm;
+  const rev=D.company.revenue||0;
+  const ratio=rev>0?(totalPay/rev*100).toFixed(1):null;
+  const byBranch={};
+  emps.forEach(e=>{const b=e.branch||'Không rõ';if(!byBranch[b])byBranch[b]={basic:0,comm:0,sales:0,count:0};byBranch[b].basic+=latestBasic(e);byBranch[b].comm+=latestComm(e);byBranch[b].sales+=latestSales(e);byBranch[b].count++;});
+  const branches=Object.entries(byBranch).sort((a,b)=>(b[1].basic+b[1].comm)-(a[1].basic+a[1].comm));
+  document.getElementById('app').innerHTML=`
+    <div class="rev-bar">
+      <label>📈 Doanh thu công ty:</label>
+      <input type="number" id="rev-input" value="${rev||''}" placeholder="Nhập doanh thu (đ)" style="width:195px">
+      <button class="btn btn-secondary btn-sm" onclick="updRev()">Cập nhật</button>
+      ${rev?`<span style="font-size:11.5px;color:var(--t3)">${fm(rev)}</span>`:''}
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-lbl">Tổng nhân sự</div><div class="stat-val c-blue">${emps.length}</div><div class="stat-sub">Đang hoạt động</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng lương cơ bản</div><div class="stat-val c-acc">${fms(totalBasic)}</div><div class="stat-sub">${fm(totalBasic)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng HH / Dịch vụ</div><div class="stat-val c-pur">${fms(totalComm)}</div><div class="stat-sub">${fm(totalComm)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green">${fms(totalPay)}</div><div class="stat-sub">${fm(totalPay)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal">${fms(totalSales)}</div><div class="stat-sub">Toàn công ty</div></div>
+      ${emps.length?`<div class="stat-card"><div class="stat-lbl">Lương CB TB / người</div><div class="stat-val c-ora">${fms(Math.round(totalBasic/emps.length))}</div><div class="stat-sub">Bình quân</div></div>`:''}
+      ${ratio!==null?`<div class="stat-card" style="grid-column:1/-1"><div class="stat-lbl">Tỉ lệ Quỹ lương / Doanh thu</div><div class="stat-val ${+ratio>40?'c-red':+ratio>25?'c-acc':'c-green'}">${ratio}%</div><div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div><div class="rbar-labels"><span>0%</span><span>25%</span><span>50%</span><span>100%</span></div></div>`:''}
+    </div>
+    ${emps.length?`
+    <div class="charts-grid">
+      <div class="card"><div class="card-title">Quỹ lương theo cơ sở</div><div class="chart-box"><canvas id="ch-branch"></canvas></div></div>
+      <div class="card"><div class="card-title">Cơ cấu lương (CB vs HH/DV)</div><div class="chart-box"><canvas id="ch-comp"></canvas></div></div>
+    </div>
+    <div class="card" style="margin-bottom:18px">
+      <div class="card-title">Chi tiết theo cơ sở</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Cơ sở</th><th>Nhân sự</th><th>Lương CB</th><th>HH/DV</th><th>Tổng quỹ lương</th><th>DT BH TB 6th</th>${rev?'<th>% Doanh thu</th>':''}</tr></thead>
+        <tbody>
+          ${branches.map(([n,d])=>`<tr><td><span class="badge ${branchBadge(n)}">${n}</span></td><td class="td2">${d.count} người</td><td><span class="money">${fms(d.basic)}</span></td><td><span class="money c-pur">${fms(d.comm)}</span></td><td><span class="money c-acc">${fms(d.basic+d.comm)}</span></td><td><span class="money c-teal">${fms(d.sales)}</span></td>${rev?`<td class="td2">${((d.basic+d.comm)/rev*100).toFixed(1)}%</td>`:''}</tr>`).join('')}
+          <tr class="tr-sum"><td><strong>Tổng</strong></td><td class="td2">${emps.length} người</td><td><span class="money"><strong>${fms(totalBasic)}</strong></span></td><td><span class="money c-pur"><strong>${fms(totalComm)}</strong></span></td><td><span class="money c-green"><strong>${fms(totalPay)}</strong></span></td><td><span class="money c-teal"><strong>${fms(totalSales)}</strong></span></td>${rev?`<td class="td2"><strong>${ratio}%</strong></td>`:''}</tr>
+        </tbody>
+      </table></div>
+    </div>`:
+    `<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">Chưa có dữ liệu.</div><button class="btn btn-primary" onclick="nav('employees')">👥 Đến Nhân sự</button></div>`}
+  `;
+  if(emps.length) setTimeout(()=>drawCharts(branches,totalBasic,totalComm),60);
+}
+function updRev(){ D.company.revenue=parseFloat(document.getElementById('rev-input').value)||0; save(); renderDash(); }
+function drawCharts(branches,totalBasic,totalComm){
+  const bCtx=document.getElementById('ch-branch');
+  if(bCtx) new Chart(bCtx,{type:'bar',data:{labels:branches.map(([n])=>n),datasets:[{label:'Lương CB',data:branches.map(([,d])=>d.basic),backgroundColor:'rgba(212,160,23,.75)',borderRadius:4},{label:'HH/DV',data:branches.map(([,d])=>d.comm),backgroundColor:'rgba(56,139,253,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fms(c.raw)}`}}},scales:{x:{stacked:true,ticks:{color:'#8b949e'},grid:{color:'#21262d'}},y:{stacked:true,ticks:{color:'#8b949e',callback:v=>fms(v)},grid:{color:'#21262d'}}}}});
+  const cCtx=document.getElementById('ch-comp');
+  if(cCtx&&(totalBasic+totalComm)>0) new Chart(cCtx,{type:'doughnut',data:{labels:['Lương cơ bản','HH / Dịch vụ'],datasets:[{data:[totalBasic,totalComm],backgroundColor:['rgba(212,160,23,.8)','rgba(56,139,253,.8)'],borderColor:['#d4a017','#388bfd'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'64%',plugins:{legend:{position:'bottom',labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11},padding:14}},tooltip:{callbacks:{label:c=>`${c.label}: ${fms(c.raw)} (${(c.raw/(totalBasic+totalComm)*100).toFixed(1)}%)`}}}}});
+}
+
+// ── EMPLOYEE LIST ──────────────────────────────────────────────────────────────
+function renderEmpList(){
+  document.getElementById('tb-title').textContent='Nhân sự';
+  document.getElementById('tb-sub').textContent='Danh sách & quản lý thông tin nhân sự';
+  document.getElementById('tb-actions').innerHTML=`<button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button>`;
+  document.getElementById('app').innerHTML=`
+    <div class="searchbar"><span style="color:var(--t3)">🔍</span><input id="q" type="text" placeholder="Tìm theo tên, cơ sở, vị trí..." oninput="filterEmps()"></div>
+    ${D.employees.length===0?`<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Chưa có nhân sự nào.</div><button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button></div>`:`
+    <div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>Nhân sự</th><th>Cơ sở</th><th>Chức danh</th><th>Ca</th><th>Thâm niên</th><th>Lương CB</th><th>HH/DV TB</th><th>DT BH TB 6th</th><th>Reviews</th><th></th></tr></thead>
+      <tbody id="emp-tb">${empRows(D.employees)}</tbody>
+    </table></div></div>`}`;
+}
+function empRows(emps){
+  return emps.map(e=>{
+    const basic=latestBasic(e),comm=latestComm(e),sales=latestSales(e),rc=e.reviews?.length||0;
+    return `<tr class="tr-click" style="cursor:pointer" onclick="nav('emp-detail',{empId:'${e.id}'})">
+      <td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#0d1117;flex-shrink:0">${ini(e.name)}</div><span style="font-weight:700">${e.name}</span></div></td>
+      <td><span class="badge ${branchBadge(e.branch)}">${e.branch||'—'}</span></td>
+      <td><span class="badge ${posBadge(e.position)}">${e.position||'—'}</span></td>
+      <td class="td2">${e.shift||'—'}</td>
+      <td class="td2">${sen(e.seniorityMonths)}</td>
+      <td><span class="money">${basic?fms(basic):'—'}</span></td>
+      <td><span class="money c-pur">${comm?fms(comm):'—'}</span></td>
+      <td><span class="money c-teal">${sales?fms(sales):'—'}</span></td>
+      <td><span class="badge b-acc">${rc} đợt</span></td>
+      <td onclick="event.stopPropagation()"><div class="flex-gap"><button class="btn btn-ghost btn-sm" onclick="openEditEmp('${e.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="delEmp('${e.id}')">🗑️</button></div></td>
+    </tr>`;
+  }).join('');
+}
+function filterEmps(){
+  const q=document.getElementById('q').value.toLowerCase();
+  const f=D.employees.filter(e=>e.name.toLowerCase().includes(q)||(e.branch||'').toLowerCase().includes(q)||(e.position||'').toLowerCase().includes(q)||(e.dept||'').toLowerCase().includes(q));
+  const tb=document.getElementById('emp-tb'); if(tb) tb.innerHTML=empRows(f);
+}
+
+// ── EMPLOYEE DETAIL ────────────────────────────────────────────────────────────
+function renderEmpDetail(id){
+  const emp=D.employees.find(e=>e.id===id); if(!emp){nav('employees');return;}
+  document.getElementById('tb-title').textContent=emp.name;
+  document.getElementById('tb-sub').textContent=`${emp.position||''} · ${emp.branch||''}`;
+  document.getElementById('tb-actions').innerHTML=`<button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm đợt review</button>`;
+  const revs=[...(emp.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+  const latest=revs[0];
+  document.getElementById('app').innerHTML=`
+    <button class="back-btn" onclick="nav('employees')">← Quay lại</button>
+    <div class="card" style="margin-bottom:18px">
+      <div class="emp-hd">
+        <div class="avatar">${ini(emp.name)}</div>
+        <div style="flex:1">
+          <div style="font-size:19px;font-weight:800">${emp.name}</div>
+          <div class="emp-meta">
+            <span class="meta-i">🏢 ${emp.branch||'Chưa rõ'}</span>
+            <span class="meta-i">💼 ${emp.position||'Chưa rõ'}</span>
+            <span class="meta-i">🏷 ${emp.dept||'Chưa rõ'}</span>
+            <span class="meta-i">🕐 ${emp.shift||'Chưa rõ ca'}</span>
+            <span class="meta-i">⏱ ${sen(emp.seniorityMonths)}</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="openEditEmp('${emp.id}')">✏️ Sửa</button>
+      </div>
+      ${latest?`<div class="mini-3">
+        <div class="mini-box"><div class="stat-lbl">Lương cơ bản hiện tại</div><div class="stat-val c-acc" style="font-size:17px">${fms(latest.approvedSalary||latest.currentBaseSalary||0)}</div></div>
+        <div class="mini-box"><div class="stat-lbl">HH / Dịch vụ TB</div><div class="stat-val c-pur" style="font-size:17px">${fms(latest.avgCommission||0)}</div></div>
+        <div class="mini-box"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal" style="font-size:17px">${fms(latest.avgSales6m||0)}</div></div>
+      </div>`:''}
+    </div>
+    <div class="row-actions">
+      <div style="font-size:13.5px;font-weight:800">Lịch sử review (${revs.length} đợt)</div>
+      <button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm đợt review</button>
+    </div>
+    ${revs.length===0?`<div class="empty"><div class="empty-ico">💰</div><div class="empty-txt">Chưa có đợt review nào</div><button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm</button></div>`:revs.map((r,i)=>revCard(r,emp.id,i===0)).join('')}`;
+}
+function revCard(rev,empId,isLatest){
+  const raise=(rev.approvedSalary&&rev.currentBaseSalary)?rev.approvedSalary-rev.currentBaseSalary:null;
+  const n=rev.notes||{};
+  const hasNote=n.pros||n.cons||n.managerJTBD||n.employeeWish||n.actionPlan;
+  return `<div class="rev-card">
+    <div class="rev-hd">
+      <div><div class="rev-date">Đợt review: ${fd(rev.reviewDate)}</div>${isLatest?'<span class="badge b-green" style="margin-top:4px">Gần nhất</span>':''}</div>
+      <div class="flex-gap"><button class="btn btn-ghost btn-sm" onclick="openEditRev('${empId}','${rev.id}')">✏️ Sửa</button><button class="btn btn-danger btn-sm" onclick="delRev('${empId}','${rev.id}')">🗑️</button></div>
+    </div>
+    <div class="sal-grid">
+      <div class="sal-item"><div class="sal-lbl">Lương CB hiện tại</div><div class="sal-val">${fms(rev.currentBaseSalary)}</div></div>
+      <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)}</div></div>
+      <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Nhân viên)</div><div class="sal-val c-pur">${fms(rev.empProposed)}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Quản lý)</div><div class="sal-val c-acc">${fms(rev.mgrProposed)}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Ban VH)</div><div class="sal-val c-ora">${fms(rev.opsProposed)}</div></div>
+    </div>
+    ${rev.approvedSalary?`<div class="sal-approved"><div><div class="sal-app-lbl">✅ Lương được duyệt chính thức</div>${rev.approvedDate?`<div style="font-size:10.5px;color:var(--green);opacity:.8">Ngày duyệt: ${fd(rev.approvedDate)}</div>`:''} ${raise!==null?`<div style="font-size:10.5px;color:var(--green);margin-top:2px">Chênh lệch: ${raise>0?'+':''}${fms(raise)}</div>`:''}</div><div class="sal-app-val">${fm(rev.approvedSalary)}</div></div>`:''}
+    ${hasNote?`<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:7px">📝 Ghi chú review</div>
+    <div class="notes-grid">
+      ${n.pros?`<div class="note-item"><div class="note-lbl" style="color:var(--green)">✅ Ưu điểm</div><div class="note-txt">${n.pros}</div></div>`:''}
+      ${n.cons?`<div class="note-item"><div class="note-lbl" style="color:var(--red)">⚠️ Nhược điểm</div><div class="note-txt">${n.cons}</div></div>`:''}
+      ${n.managerJTBD?`<div class="note-item"><div class="note-lbl" style="color:var(--blue)">🎯 JTBD Quản lý</div><div class="note-txt">${n.managerJTBD}</div></div>`:''}
+      ${n.employeeWish?`<div class="note-item"><div class="note-lbl" style="color:var(--pur)">💭 Mong muốn NV</div><div class="note-txt">${n.employeeWish}</div></div>`:''}
+      ${n.actionPlan?`<div class="note-item full"><div class="note-lbl" style="color:var(--ora)">🚀 Kế hoạch hành động</div><div class="note-txt">${n.actionPlan}</div></div>`:''}
+    </div>`:''}
+  </div>`;
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────────────
+const closeModal=()=>document.getElementById('modal-root').innerHTML='';
+function showModal(html){document.getElementById('modal-root').innerHTML=`<div class="overlay" onclick="if(event.target.classList.contains('overlay'))closeModal()"><div class="modal">${html}</div></div>`;}
+
+// ── EMPLOYEE MODAL ─────────────────────────────────────────────────────────────
+function openAddEmp(){empModal(null);}
+function openEditEmp(id){empModal(D.employees.find(e=>e.id===id));}
+function empModal(emp){
+  showModal(`
+    <div class="mhd"><div class="mhd-title">${emp?'Sửa nhân sự':'Thêm nhân sự mới'}</div><button class="m-close" onclick="closeModal()">✕</button></div>
+    <div class="mbody">
+      <div class="fsec"><div class="fsec-title">👤 Thông tin cơ bản</div>
+        <div class="fgrid">
+          <div class="fg full"><label>Họ & Tên *</label><input id="f-name" value="${emp?.name||''}" placeholder="Nguyễn Văn A"></div>
+          <div class="fg"><label>Cơ sở</label>${selOpts('branches','f-branch',emp?.branch||'')}</div>
+          <div class="fg"><label>Chức danh</label>${selOpts('positions','f-pos',emp?.position||'')}</div>
+          <div class="fg"><label>Phòng ban</label>${selOpts('depts','f-dept',emp?.dept||'')}</div>
+          <div class="fg"><label>Ca làm việc</label>${selOpts('shifts','f-shift',emp?.shift||'')}</div>
+          <div class="fg"><label>Thâm niên (tháng)</label><input type="number" id="f-sen" value="${emp?.seniorityMonths||''}" placeholder="24" min="0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal()">Hủy</button><button class="btn btn-primary" onclick="saveEmp('${emp?.id||''}')">Lưu</button></div>`);
+}
+function saveEmp(id){
+  const name=document.getElementById('f-name').value.trim(); if(!name){alert('Vui lòng nhập tên');return;}
+  const data={name,branch:document.getElementById('f-branch').value,position:document.getElementById('f-pos').value,dept:document.getElementById('f-dept').value,shift:document.getElementById('f-shift').value,seniorityMonths:parseInt(document.getElementById('f-sen').value)||0};
+  if(id){const e=D.employees.find(x=>x.id===id);if(e)Object.assign(e,data);}
+  else D.employees.push({id:uid('emp'),...data,reviews:[]});
+  save();closeModal();render();
+}
+function delEmp(id){
+  const e=D.employees.find(x=>x.id===id); if(!e||!confirm(`Xóa nhân sự "${e.name}"?`))return;
+  D.employees=D.employees.filter(x=>x.id!==id); save(); if(view==='emp-detail')nav('employees');else render();
+}
+
+// ── REVIEW MODAL ───────────────────────────────────────────────────────────────
+function openAddRev(empId){revModal(empId,null);}
+function openEditRev(empId,revId){revModal(empId,revId);}
+function revModal(empId,revId){
+  const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
+  const rev=revId?emp.reviews.find(r=>r.id===revId):null;
+  const n=rev?.notes||{};
+  showModal(`
+    <div class="mhd"><div class="mhd-title">${rev?'Sửa đợt review':'Thêm đợt review'} — ${emp.name}</div><button class="m-close" onclick="closeModal()">✕</button></div>
+    <div class="mbody" style="max-height:72vh;overflow-y:auto">
+      <div class="fsec"><div class="fsec-title">📅 Thông tin đợt review</div>
+        <div class="fgrid"><div class="fg"><label>Ngày review *</label><input type="date" id="r-date" value="${rev?.reviewDate||new Date().toISOString().slice(0,10)}"></div></div>
+      </div>
+      <div class="fsec"><div class="fsec-title">💰 Thông tin lương</div>
+        <div class="fgrid">
+          <div class="fg"><label>Lương cơ bản hiện tại (đ)</label><input type="number" id="r-basic" placeholder="5000000" value="${rev?.currentBaseSalary||''}"></div>
+          <div class="fg"><label>HH / Dịch vụ trung bình (đ)</label><input type="number" id="r-comm" placeholder="3000000" value="${rev?.avgCommission||''}"></div>
+          <div class="fg"><label>DT bán hàng TB 6 tháng (đ)</label><input type="number" id="r-sales" placeholder="50000000" value="${rev?.avgSales6m||''}"><span class="hint">Doanh thu sản phẩm/dịch vụ do NV tạo ra</span></div>
+          <div class="fg"><label>Đề xuất từ nhân viên (đ)</label><input type="number" id="r-emp" value="${rev?.empProposed||''}"></div>
+          <div class="fg"><label>Đề xuất từ quản lý (đ)</label><input type="number" id="r-mgr" value="${rev?.mgrProposed||''}"></div>
+          <div class="fg"><label>Đề xuất từ ban vận hành (đ)</label><input type="number" id="r-ops" value="${rev?.opsProposed||''}"></div>
+          <div class="fg"><label>Lương được duyệt chính thức (đ)</label><input type="number" id="r-app" value="${rev?.approvedSalary||''}"></div>
+          <div class="fg"><label>Ngày duyệt chính thức</label><input type="date" id="r-appdate" value="${rev?.approvedDate||''}"></div>
+        </div>
+      </div>
+      <div class="fsec"><div class="fsec-title">📝 Ghi chú review</div>
+        <div class="fgrid">
+          <div class="fg"><label>✅ Ưu điểm</label><textarea id="r-pros" placeholder="Điểm mạnh, thành tích...">${n.pros||''}</textarea></div>
+          <div class="fg"><label>⚠️ Nhược điểm</label><textarea id="r-cons" placeholder="Điểm cần cải thiện...">${n.cons||''}</textarea></div>
+          <div class="fg"><label>🎯 JTBD của quản lý</label><textarea id="r-jtbd" placeholder="Quản lý kỳ vọng gì...">${n.managerJTBD||''}</textarea></div>
+          <div class="fg"><label>💭 Mong muốn của nhân viên</label><textarea id="r-wish" placeholder="Nhân viên muốn gì...">${n.employeeWish||''}</textarea></div>
+          <div class="fg full"><label>🚀 Kế hoạch hành động sau review</label><textarea id="r-action" style="min-height:90px" placeholder="Action plan cụ thể...">${n.actionPlan||''}</textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal()">Hủy</button><button class="btn btn-primary" onclick="saveRev('${empId}','${revId||''}')">Lưu đợt review</button></div>`);
+}
+function saveRev(empId,revId){
+  const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
+  const d=document.getElementById('r-date').value; if(!d){alert('Chọn ngày review');return;}
+  const data={reviewDate:d,currentBaseSalary:+document.getElementById('r-basic').value||0,avgCommission:+document.getElementById('r-comm').value||0,avgSales6m:+document.getElementById('r-sales').value||0,empProposed:+document.getElementById('r-emp').value||0,mgrProposed:+document.getElementById('r-mgr').value||0,opsProposed:+document.getElementById('r-ops').value||0,approvedSalary:+document.getElementById('r-app').value||0,approvedDate:document.getElementById('r-appdate').value,notes:{pros:document.getElementById('r-pros').value.trim(),cons:document.getElementById('r-cons').value.trim(),managerJTBD:document.getElementById('r-jtbd').value.trim(),employeeWish:document.getElementById('r-wish').value.trim(),actionPlan:document.getElementById('r-action').value.trim()}};
+  if(!emp.reviews) emp.reviews=[];
+  if(revId){const i=emp.reviews.findIndex(r=>r.id===revId);if(i!==-1)emp.reviews[i]={...emp.reviews[i],...data};}
+  else emp.reviews.push({id:uid('rev'),...data});
+  save();closeModal();render();
+}
+function delRev(empId,revId){
+  if(!confirm('Xóa đợt review này?'))return;
+  const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
+  emp.reviews=emp.reviews.filter(r=>r.id!==revId); save();render();
+}
+
+// ── EXPORT EXCEL ───────────────────────────────────────────────────────────────
+function exportExcel(){
+  const wb = XLSX.utils.book_new();
+
+  // ── Sheet 1: Tổng hợp nhân sự ──
+  const sumHeader = ['Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc','Thâm niên (tháng)','Số đợt review','Lương CB mới nhất (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)'];
+  const sumRows = D.employees.map(e=>{
+    const r = latestRev(e);
+    return [
+      e.name||'',
+      e.branch||'',
+      e.position||'',
+      e.dept||'',
+      e.shift||'',
+      e.seniorityMonths||0,
+      e.reviews?.length||0,
+      r?(r.approvedSalary||r.currentBaseSalary||0):0,
+      r?(r.avgCommission||0):0,
+      r?(r.avgSales6m||0):0
+    ];
+  });
+  const wsSum = XLSX.utils.aoa_to_sheet([sumHeader,...sumRows]);
+  // Column widths
+  wsSum['!cols'] = [22,14,14,14,14,10,10,18,18,18].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsSum, 'Tổng hợp nhân sự');
+
+  // ── Sheet 2: Chi tiết đợt review ──
+  const revHeader = [
+    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca',
+    'Ngày review','Lương CB hiện tại (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)',
+    'Đề xuất - NV (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
+    'Lương được duyệt (đ)','Ngày duyệt',
+    '✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'
+  ];
+  const revRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      revRows.push([
+        e.name||'',
+        e.branch||'',
+        e.position||'',
+        e.dept||'',
+        e.shift||'',
+        r.reviewDate||'',
+        r.currentBaseSalary||0,
+        r.avgCommission||0,
+        r.avgSales6m||0,
+        r.empProposed||0,
+        r.mgrProposed||0,
+        r.opsProposed||0,
+        r.approvedSalary||0,
+        r.approvedDate||'',
+        n.pros||'',
+        n.cons||'',
+        n.managerJTBD||'',
+        n.employeeWish||'',
+        n.actionPlan||''
+      ]);
+    });
+  });
+  const wsRev = XLSX.utils.aoa_to_sheet([revHeader,...revRows]);
+  wsRev['!cols'] = [22,14,14,14,12,14,18,16,18,18,18,16,18,14,40,40,40,40,50].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsRev, 'Chi tiết review');
+
+  // ── Sheet 3: Ưu nhược điểm tổng hợp ──
+  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
+  const noteRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      if(n.pros||n.cons||n.managerJTBD||n.employeeWish||n.actionPlan){
+        noteRows.push([
+          e.name||'',
+          e.branch||'',
+          e.position||'',
+          r.reviewDate||'',
+          n.pros||'',
+          n.cons||'',
+          n.managerJTBD||'',
+          n.employeeWish||'',
+          n.actionPlan||''
+        ]);
+      }
+    });
+  });
+  const wsNote = XLSX.utils.aoa_to_sheet([noteHeader,...noteRows]);
+  wsNote['!cols'] = [22,14,14,14,50,50,50,50,60].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsNote, 'Ưu nhược điểm');
+
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `HR_Review_${date}.xlsx`);
+}
+
+render();
+</script>
+</body>
+</html>

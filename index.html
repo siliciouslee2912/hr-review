@@ -6,6 +6,7 @@
 <title>HR Salary Review</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{--bg:#0d1117;--s1:#161b22;--s2:#21262d;--s3:#2d333b;--bd:#30363d;--t1:#e6edf3;--t2:#8b949e;--t3:#6e7681;--acc:#d4a017;--acc-bg:rgba(212,160,23,.13);--blue:#388bfd;--blue-bg:rgba(56,139,253,.13);--green:#3fb950;--green-bg:rgba(63,185,80,.13);--red:#f85149;--red-bg:rgba(248,81,73,.13);--ora:#e8823a;--ora-bg:rgba(232,130,58,.13);--pur:#bc8cff;--pur-bg:rgba(188,140,255,.13);--teal:#39d0d8;--teal-bg:rgba(57,208,216,.13)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -30,6 +31,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--t1
 .btn-secondary{background:var(--s3);color:var(--t1);border:1px solid var(--bd)}.btn-secondary:hover{background:var(--bd)}
 .btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--bd)}.btn-ghost:hover{background:var(--s2);color:var(--t1)}
 .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,81,73,.25)}.btn-danger:hover{background:var(--red);color:#fff}
+.btn-export{background:var(--green-bg);color:var(--green);border:1px solid rgba(63,185,80,.25)}.btn-export:hover{background:var(--green);color:#0d1117}
 .btn-sm{padding:4px 9px;font-size:11.5px}
 .btn-plus{width:28px;height:28px;min-width:28px;border-radius:6px;background:var(--s3);border:1px solid var(--bd);color:var(--acc);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;line-height:1}
 .btn-plus:hover{background:var(--acc-bg);border-color:var(--acc)}
@@ -220,7 +222,7 @@ function selOpts(type, selId, cur='') {
 function renderDash(){
   document.getElementById('tb-title').textContent='Dashboard';
   document.getElementById('tb-sub').textContent='Tổng quan quỹ lương & phân tích nhân sự';
-  document.getElementById('tb-actions').innerHTML='';
+  document.getElementById('tb-actions').innerHTML=`<button class="btn btn-export" onclick="exportExcel()">⬇ Export Excel</button>`;
   const emps=D.employees;
   const totalBasic=emps.reduce((s,e)=>s+latestBasic(e),0);
   const totalComm=emps.reduce((s,e)=>s+latestComm(e),0);
@@ -278,7 +280,7 @@ function drawCharts(branches,totalBasic,totalComm){
 function renderEmpList(){
   document.getElementById('tb-title').textContent='Nhân sự';
   document.getElementById('tb-sub').textContent='Danh sách & quản lý thông tin nhân sự';
-  document.getElementById('tb-actions').innerHTML=`<button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button>`;
+  document.getElementById('tb-actions').innerHTML=`<div class="flex-gap"><button class="btn btn-export" onclick="exportExcel()">⬇ Export Excel</button><button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button></div>`;
   document.getElementById('app').innerHTML=`
     <div class="searchbar"><span style="color:var(--t3)">🔍</span><input id="q" type="text" placeholder="Tìm theo tên, cơ sở, vị trí..." oninput="filterEmps()"></div>
     ${D.employees.length===0?`<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Chưa có nhân sự nào.</div><button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button></div>`:`
@@ -462,6 +464,102 @@ function delRev(empId,revId){
   if(!confirm('Xóa đợt review này?'))return;
   const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
   emp.reviews=emp.reviews.filter(r=>r.id!==revId); save();render();
+}
+
+// ── EXPORT EXCEL ───────────────────────────────────────────────────────────────
+function exportExcel() {
+  if(!D.employees.length){ alert('Chưa có dữ liệu để export'); return; }
+  const wb = XLSX.utils.book_new();
+
+  // ── Sheet 1: Tổng quan nhân sự ──
+  const s1 = D.employees.map(e => {
+    const r = latestRev(e);
+    return {
+      'Họ & Tên':           e.name||'',
+      'Cơ sở':              e.branch||'',
+      'Chức danh':          e.position||'',
+      'Phòng ban':          e.dept||'',
+      'Ca làm việc':        e.shift||'',
+      'Thâm niên (tháng)':  e.seniorityMonths||0,
+      'Lương CB hiện tại':  r ? (r.approvedSalary||r.currentBaseSalary||0) : 0,
+      'HH / Dịch vụ TB':   r ? (r.avgCommission||0) : 0,
+      'DT bán hàng TB 6th': r ? (r.avgSales6m||0) : 0,
+      'Thu nhập ước tính':  r ? ((r.approvedSalary||r.currentBaseSalary||0)+(r.avgCommission||0)) : 0,
+      'Số lần review':      e.reviews?.length||0,
+    };
+  });
+  const ws1 = XLSX.utils.json_to_sheet(s1);
+  ws1['!cols'] = [22,14,16,14,12,16,20,20,22,20,14].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws1, 'Tổng quan nhân sự');
+
+  // ── Sheet 2: Lịch sử review ──
+  const s2 = [];
+  D.employees.forEach(e => {
+    (e.reviews||[]).sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate)).forEach(r => {
+      const n = r.notes||{};
+      s2.push({
+        'Họ & Tên':              e.name||'',
+        'Cơ sở':                 e.branch||'',
+        'Chức danh':             e.position||'',
+        'Ngày review':           r.reviewDate||'',
+        'Lương CB hiện tại':     r.currentBaseSalary||0,
+        'HH / Dịch vụ TB':      r.avgCommission||0,
+        'DT BH TB 6 tháng':     r.avgSales6m||0,
+        'Đề xuất - Nhân viên':  r.empProposed||0,
+        'Đề xuất - Quản lý':    r.mgrProposed||0,
+        'Đề xuất - Ban VH':     r.opsProposed||0,
+        'Lương được duyệt':     r.approvedSalary||0,
+        'Ngày duyệt':           r.approvedDate||'',
+        'Chênh lệch':           r.approvedSalary&&r.currentBaseSalary ? r.approvedSalary-r.currentBaseSalary : 0,
+        'Ưu điểm':              n.pros||'',
+        'Nhược điểm':           n.cons||'',
+        'JTBD Quản lý':         n.managerJTBD||'',
+        'Mong muốn NV':         n.employeeWish||'',
+        'Kế hoạch hành động':   n.actionPlan||'',
+      });
+    });
+  });
+  const ws2 = XLSX.utils.json_to_sheet(s2.length ? s2 : [{'Ghi chú':'Chưa có đợt review nào'}]);
+  ws2['!cols'] = [22,14,16,14,20,20,22,20,20,18,20,14,14,30,30,30,30,30].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử Review');
+
+  // ── Sheet 3: Quỹ lương theo cơ sở ──
+  const byBranch = {};
+  D.employees.forEach(e => {
+    const b = e.branch||'Không rõ';
+    if(!byBranch[b]) byBranch[b]={basic:0,comm:0,sales:0,count:0};
+    byBranch[b].basic += latestBasic(e);
+    byBranch[b].comm  += latestComm(e);
+    byBranch[b].sales += latestSales(e);
+    byBranch[b].count++;
+  });
+  const totalBasic = D.employees.reduce((s,e)=>s+latestBasic(e),0);
+  const totalComm  = D.employees.reduce((s,e)=>s+latestComm(e),0);
+  const totalPay   = totalBasic+totalComm;
+  const rev        = D.company.revenue||0;
+  const s3 = Object.entries(byBranch).map(([name,d])=>({
+    'Cơ sở':           name,
+    'Số nhân sự':      d.count,
+    'Tổng lương CB':   d.basic,
+    'Tổng HH / DV':   d.comm,
+    'Tổng quỹ lương':  d.basic+d.comm,
+    'DT BH TB 6th':   d.sales,
+    '% Quỹ lương / Doanh thu': rev>0 ? +((d.basic+d.comm)/rev*100).toFixed(1) : '',
+  }));
+  s3.push({
+    'Cơ sở':'TỔNG', 'Số nhân sự':D.employees.length,
+    'Tổng lương CB':totalBasic, 'Tổng HH / DV':totalComm,
+    'Tổng quỹ lương':totalPay,
+    'DT BH TB 6th':D.employees.reduce((s,e)=>s+latestSales(e),0),
+    '% Quỹ lương / Doanh thu': rev>0 ? +(totalPay/rev*100).toFixed(1) : '',
+  });
+  const ws3 = XLSX.utils.json_to_sheet(s3);
+  ws3['!cols'] = [16,12,20,18,20,22,26].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws3, 'Quỹ lương theo cơ sở');
+
+  // ── Download ──
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `HR_Review_${date}.xlsx`);
 }
 
 render();

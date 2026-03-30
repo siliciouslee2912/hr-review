@@ -267,19 +267,94 @@ function calcRevSalary(){
 const posBadge = p => { if(!p) return 'b-gray'; if(p.includes('QL')||p.includes('Quản')) return 'b-red'; if(p.includes('CV')||p.includes('Chuyên')) return 'b-teal'; if(p.includes('KTV')||p.includes('Kỹ')) return 'b-blue'; return 'b-gray'; };
 
 // ── CUSTOM OPTIONS ─────────────────────────────────────────────────────────────
+const OPT_LABELS = {branches:'Cơ sở',positions:'Chức danh',depts:'Phòng ban',shifts:'Ca làm việc'};
+
 function addOpt(type, selId) {
-  const labels = {branches:'cơ sở',positions:'chức danh',depts:'phòng ban',shifts:'ca làm việc'};
-  const val = prompt(`Nhập tên ${labels[type]} mới:`);
-  if(!val||!val.trim()) return;
-  const v = val.trim();
-  if(!opts()[type].includes(v)) { opts()[type].push(v); save(); }
-  const sel = document.getElementById(selId);
-  if(sel) {
-    if(![...sel.options].find(o=>o.value===v)) {
-      const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o);
-    }
-    sel.value = v;
-  }
+  openOptManager(type, selId);
+}
+
+function openOptManager(type, selId) {
+  const label = OPT_LABELS[type];
+  const list  = opts()[type] || [];
+  showModal(`
+    <div class="mhd">
+      <div class="mhd-title">⚙️ Quản lý ${label}</div>
+      <button class="m-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="fsec">
+        <div class="fsec-title">Danh sách hiện tại</div>
+        <div id="opt-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+          ${list.map((v,i) => `
+            <div style="display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:7px 10px">
+              <span id="opt-txt-${i}" style="flex:1;font-size:13px;font-weight:500">${v}</span>
+              <input id="opt-inp-${i}" style="display:none;flex:1;background:var(--s3);border:1px solid var(--acc);border-radius:6px;padding:5px 9px;color:var(--t1);font-size:13px;font-family:inherit" value="${v}">
+              <button class="btn btn-ghost btn-sm" onclick="startEditOpt('${type}','${selId}',${i})">✏️</button>
+              <button class="btn btn-ghost btn-sm" onclick="saveEditOpt('${type}','${selId}',${i})" id="opt-save-${i}" style="display:none">💾</button>
+              <button class="btn btn-danger btn-sm" onclick="delOpt('${type}','${selId}','${v.replace(/'/g,"\\'")}')">🗑️</button>
+            </div>`).join('')}
+          ${list.length === 0 ? '<div style="color:var(--t3);font-size:12px;padding:8px 0">Chưa có danh mục nào.</div>' : ''}
+        </div>
+        <div class="fsec-title">Thêm mới</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="opt-new-val" placeholder="Nhập tên ${label.toLowerCase()} mới..." style="flex:1">
+          <button class="btn btn-primary" onclick="confirmAddOpt('${type}','${selId}')">+ Thêm</button>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-ghost" onclick="closeModal()">Đóng</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('opt-new-val')?.addEventListener('keydown',e=>{if(e.key==='Enter')confirmAddOpt(type,selId);}),30);
+}
+
+function startEditOpt(type, selId, i) {
+  document.getElementById(`opt-txt-${i}`).style.display  = 'none';
+  document.getElementById(`opt-inp-${i}`).style.display  = 'block';
+  document.getElementById(`opt-save-${i}`).style.display = 'inline-flex';
+  document.getElementById(`opt-inp-${i}`).focus();
+  document.getElementById(`opt-inp-${i}`).addEventListener('keydown', e => { if(e.key==='Enter') saveEditOpt(type,selId,i); });
+}
+
+function saveEditOpt(type, selId, i) {
+  const newVal = document.getElementById(`opt-inp-${i}`)?.value.trim();
+  if (!newVal) return;
+  const list = opts()[type];
+  const oldVal = list[i];
+  list[i] = newVal;
+  // Update any employees using the old value
+  if (type === 'branches') D.employees.forEach(e => { if(e.branch===oldVal) e.branch=newVal; });
+  if (type === 'positions') D.employees.forEach(e => { if(e.position===oldVal) e.position=newVal; });
+  if (type === 'depts')     D.employees.forEach(e => { if(e.dept===oldVal) e.dept=newVal; });
+  if (type === 'shifts')    D.employees.forEach(e => { if(e.shift===oldVal) e.shift=newVal; });
+  save();
+  openOptManager(type, selId);
+  // Re-select saved value in parent select after modal refreshes
+  setTimeout(() => { const sel=document.getElementById(selId); if(sel) { refreshSelOpts(sel,type,newVal); }}, 50);
+}
+
+function delOpt(type, selId, val) {
+  const list = opts()[type];
+  const i = list.indexOf(val);
+  if (i === -1) return;
+  list.splice(i, 1);
+  save();
+  openOptManager(type, selId);
+  setTimeout(() => { const sel=document.getElementById(selId); if(sel) refreshSelOpts(sel,type,sel.value===val?'':sel.value); }, 50);
+}
+
+function confirmAddOpt(type, selId) {
+  const v = document.getElementById('opt-new-val')?.value.trim();
+  if (!v) return;
+  if (!opts()[type].includes(v)) { opts()[type].push(v); save(); }
+  openOptManager(type, selId);
+  setTimeout(() => { const sel=document.getElementById(selId); if(sel) refreshSelOpts(sel,type,v); }, 50);
+}
+
+function refreshSelOpts(sel, type, selectVal) {
+  const list = opts()[type] || [];
+  sel.innerHTML = `<option value="">-- Chọn --</option>` +
+    list.map(v=>`<option value="${v}" ${v===selectVal?'selected':''}>${v}</option>`).join('');
 }
 
 function selOpts(type, selId, cur='') {
@@ -290,7 +365,7 @@ function selOpts(type, selId, cur='') {
         <option value="">-- Chọn --</option>
         ${list.map(v=>`<option value="${v}" ${v===cur?'selected':''}>${v}</option>`).join('')}
       </select>
-      <button type="button" class="btn-plus" onclick="addOpt('${type}','${selId}')" title="Thêm mới">+</button>
+      <button type="button" class="btn-plus" onclick="addOpt('${type}','${selId}')" title="Quản lý danh mục">⚙️</button>
     </div>`;
 }
 

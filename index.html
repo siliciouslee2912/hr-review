@@ -483,7 +483,7 @@ function revCard(rev,empId,isLatest){
     <div class="sal-grid" style="margin-bottom:14px">
       <div class="sal-item"><div class="sal-lbl">Lương CB (11 tiếng)</div><div class="sal-val c-acc">${fms(rev.currentBaseSalary)||'—'}</div></div>
       <div class="sal-item" style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.18)"><div class="sal-lbl">⏱ Lương CB ca 8 tiếng</div><div class="sal-val c-acc">${rev.salary8h?fms(rev.salary8h):(rev.currentBaseSalary?fms(Math.round(rev.currentBaseSalary/11*8)):'—')}</div></div>
-      <div class="sal-item" style="background:rgba(188,140,255,.08);border:1px solid rgba(188,140,255,.18)"><div class="sal-lbl">🕐 Lương giờ</div><div class="sal-val c-pur">${rev.salaryHourly?fms(rev.salaryHourly):(rev.currentBaseSalary?fms(Math.round(rev.currentBaseSalary/26/11)):'—')}</div></div>
+      <div class="sal-item" style="background:rgba(188,140,255,.08);border:1px solid rgba(188,140,255,.18)"><div class="sal-lbl">🕐 Lương giờ</div><div class="sal-val c-pur">${rev.currentBaseSalary?fms(Math.round(rev.currentBaseSalary/26/11)):'—'}</div></div>
       <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)||'—'}</div></div>
       <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)||'—'}</div></div>
     </div>

@@ -478,18 +478,42 @@ function revCard(rev,empId,isLatest){
       <div><div class="rev-date">Đợt review: ${fd(rev.reviewDate)}</div>${isLatest?'<span class="badge b-green" style="margin-top:4px">Gần nhất</span>':''}</div>
       <div class="flex-gap"><button class="btn btn-ghost btn-sm" onclick="openEditRev('${empId}','${rev.id}')">✏️ Sửa</button><button class="btn btn-danger btn-sm" onclick="delRev('${empId}','${rev.id}')">🗑️</button></div>
     </div>
-    <div class="sal-grid">
-      <div class="sal-item"><div class="sal-lbl">Lương CB hiện tại</div><div class="sal-val">${fms(rev.currentBaseSalary)}</div></div>
-      <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)}</div></div>
-      <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)}</div></div>
-      ${rev.salary8h?`<div class="sal-item" style="background:rgba(212,160,23,.10);border:1px solid rgba(212,160,23,.2)"><div class="sal-lbl">⏱ Lương CB ca 8 tiếng</div><div class="sal-val c-acc">${fms(rev.salary8h)}</div></div>`:''}
-      ${rev.salaryHourly?`<div class="sal-item" style="background:rgba(188,140,255,.10);border:1px solid rgba(188,140,255,.2)"><div class="sal-lbl">🕐 Lương giờ</div><div class="sal-val c-pur">${fms(rev.salaryHourly)}</div></div>`:''}
-      <div class="sal-item"><div class="sal-lbl">Đề xuất (Nhân viên)</div><div class="sal-val c-pur">${fms(rev.empProposed)}</div></div>
-      <div class="sal-item"><div class="sal-lbl">Đề xuất (Quản lý)</div><div class="sal-val c-acc">${fms(rev.mgrProposed)}</div></div>
-      <div class="sal-item"><div class="sal-lbl">Đề xuất (Ban VH)</div><div class="sal-val c-ora">${fms(rev.opsProposed)}</div></div>
+
+    <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:8px">💰 Thông tin lương hiện tại</div>
+    <div class="sal-grid" style="margin-bottom:14px">
+      <div class="sal-item"><div class="sal-lbl">Lương CB (11 tiếng)</div><div class="sal-val c-acc">${fms(rev.currentBaseSalary)||'—'}</div></div>
+      <div class="sal-item" style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.18)"><div class="sal-lbl">⏱ Lương CB ca 8 tiếng</div><div class="sal-val c-acc">${rev.salary8h?fms(rev.salary8h):(rev.currentBaseSalary?fms(Math.round(rev.currentBaseSalary/11*8)):'—')}</div></div>
+      <div class="sal-item" style="background:rgba(188,140,255,.08);border:1px solid rgba(188,140,255,.18)"><div class="sal-lbl">🕐 Lương giờ</div><div class="sal-val c-pur">${rev.salaryHourly?fms(rev.salaryHourly):(rev.currentBaseSalary?fms(Math.round(rev.currentBaseSalary/11)):'—')}</div></div>
+      <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)||'—'}</div></div>
+      <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)||'—'}</div></div>
     </div>
-    ${rev.approvedSalary?`<div class="sal-approved"><div><div class="sal-app-lbl">✅ Lương được duyệt chính thức</div>${rev.approvedDate?`<div style="font-size:10.5px;color:var(--green);opacity:.8">Ngày duyệt: ${fd(rev.approvedDate)}</div>`:''} ${raise!==null?`<div style="font-size:10.5px;color:var(--green);margin-top:2px">Chênh lệch CB: ${raise>0?'+':''}${fms(raise)}</div>`:''} ${rev.allowance?`<div style="font-size:10.5px;color:var(--ora);margin-top:2px">Phụ cấp: +${fms(rev.allowance)}</div>`:''}</div><div style="text-align:right"><div class="sal-app-val">${fm(rev.approvedSalary)}</div>${rev.allowance?`<div style="font-size:10px;color:var(--green);opacity:.8">Tổng: ${fm((rev.approvedSalary||0)+(rev.avgCommission||0)+(rev.allowance||0))}</div>`:''}</div></div>`:''}
-    ${hasNote?`<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:7px">📝 Ghi chú review</div>
+
+    <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:8px">📋 Đề xuất lương mới</div>
+    <div class="sal-grid" style="margin-bottom:14px">
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Nhân viên)</div><div class="sal-val c-pur">${fms(rev.empProposed)||'—'}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Quản lý)</div><div class="sal-val c-acc">${fms(rev.mgrProposed)||'—'}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Đề xuất (Ban VH)</div><div class="sal-val c-ora">${fms(rev.opsProposed)||'—'}</div></div>
+      <div class="sal-item"><div class="sal-lbl">Phụ cấp sau review</div><div class="sal-val c-ora">${fms(rev.allowance)||'—'}</div></div>
+    </div>
+
+    <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:8px">✅ Kết quả duyệt</div>
+    ${rev.approvedSalary?`
+    <div class="sal-approved" style="margin-bottom:0">
+      <div>
+        <div class="sal-app-lbl">✅ Lương được duyệt chính thức</div>
+        ${rev.approvedDate?`<div style="font-size:10.5px;color:var(--green);opacity:.8;margin-top:2px">Ngày duyệt: ${fd(rev.approvedDate)}</div>`:''}
+        ${raise!==null?`<div style="font-size:10.5px;color:var(--green);margin-top:2px">Chênh lệch CB: ${raise>0?'+':''}${fms(raise)}</div>`:''}
+        ${rev.allowance?`<div style="font-size:10.5px;color:var(--ora);margin-top:2px">Phụ cấp: +${fms(rev.allowance)}</div>`:''}
+        ${rev.salary8h||rev.currentBaseSalary?`<div style="font-size:10.5px;color:var(--acc);margin-top:2px">Ca 8 tiếng sau duyệt: ${fms(Math.round((rev.approvedSalary||0)/11*8))}</div>`:''}
+        ${rev.currentBaseSalary?`<div style="font-size:10.5px;color:var(--pur);margin-top:2px">Lương giờ sau duyệt: ${fms(Math.round((rev.approvedSalary||0)/11))}</div>`:''}
+      </div>
+      <div style="text-align:right">
+        <div class="sal-app-val">${fm(rev.approvedSalary)}</div>
+        ${rev.allowance?`<div style="font-size:10px;color:var(--green);opacity:.8;margin-top:4px">Tổng: ${fm((rev.approvedSalary||0)+(rev.avgCommission||0)+(rev.allowance||0))}</div>`:''}
+      </div>
+    </div>`:`<div style="padding:11px 14px;background:var(--s3);border-radius:8px;font-size:12px;color:var(--t3)">Chưa có lương duyệt chính thức</div>`}
+
+    ${hasNote?`<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-top:14px;margin-bottom:7px">📝 Ghi chú review</div>
     <div class="notes-grid">
       ${n.pros?`<div class="note-item"><div class="note-lbl" style="color:var(--green)">✅ Ưu điểm</div><div class="note-txt">${n.pros}</div></div>`:''}
       ${n.cons?`<div class="note-item"><div class="note-lbl" style="color:var(--red)">⚠️ Nhược điểm</div><div class="note-txt">${n.cons}</div></div>`:''}

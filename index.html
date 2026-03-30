@@ -199,6 +199,15 @@ const latestCurrentSalary   = e => { const r=latestRev(e); return r?(r.currentBa
 const latestApprovedSalary  = e => { const r=latestRev(e); return r?(r.approvedSalary||0):0; };
 const latestAllowance       = e => { const r=latestRev(e); return r?(r.allowance||0):0; };
 const branchBadge = b => ({'Quan Hoa':'b-blue','Hà Đông':'b-acc','TXS':'b-pur'}[b]||'b-gray');
+const monthsFrom = d => { if(!d) return 0; const s=new Date(d),n=new Date(); return Math.max(0,(n.getFullYear()-s.getFullYear())*12+(n.getMonth()-s.getMonth())); };
+function calcSen(){
+  const d=document.getElementById('f-joined')?.value;
+  const m=monthsFrom(d);
+  const disp=document.getElementById('f-sen-display');
+  const hid=document.getElementById('f-sen');
+  if(disp) disp.value=d?(sen(m)||'0 tháng'):'';
+  if(hid) hid.value=m;
+}
 const posBadge = p => { if(!p) return 'b-gray'; if(p.includes('QL')||p.includes('Quản')) return 'b-red'; if(p.includes('CV')||p.includes('Chuyên')) return 'b-teal'; if(p.includes('KTV')||p.includes('Kỹ')) return 'b-blue'; return 'b-gray'; };
 
 // ── CUSTOM OPTIONS ─────────────────────────────────────────────────────────────
@@ -397,7 +406,7 @@ function empRows(emps){
       <td><span class="badge ${branchBadge(e.branch)}">${e.branch||'—'}</span></td>
       <td><span class="badge ${posBadge(e.position)}">${e.position||'—'}</span></td>
       <td class="td2">${e.shift||'—'}</td>
-      <td class="td2">${sen(e.seniorityMonths)}</td>
+      <td class="td2">${e.joinDate?sen(monthsFrom(e.joinDate)):sen(e.seniorityMonths)}</td>
       <td><span class="money td2">${currentSal?fms(currentSal):'—'}</span></td>
       <td><div style="display:flex;flex-direction:column;gap:2px">
         <span class="money c-green">${approvedSal?fms(approvedSal):'—'}</span>
@@ -436,7 +445,7 @@ function renderEmpDetail(id){
             <span class="meta-i">💼 ${emp.position||'Chưa rõ'}</span>
             <span class="meta-i">🏷 ${emp.dept||'Chưa rõ'}</span>
             <span class="meta-i">🕐 ${emp.shift||'Chưa rõ ca'}</span>
-            <span class="meta-i">⏱ ${sen(emp.seniorityMonths)}</span>
+            <span class="meta-i">⏱ ${emp.joinDate?`${fd(emp.joinDate)} · ${sen(monthsFrom(emp.joinDate))}`:sen(emp.seniorityMonths)}</span>
           </div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="openEditEmp('${emp.id}')">✏️ Sửa</button>
@@ -502,15 +511,19 @@ function empModal(emp){
           <div class="fg"><label>Chức danh</label>${selOpts('positions','f-pos',emp?.position||'')}</div>
           <div class="fg"><label>Phòng ban</label>${selOpts('depts','f-dept',emp?.dept||'')}</div>
           <div class="fg"><label>Ca làm việc</label>${selOpts('shifts','f-shift',emp?.shift||'')}</div>
-          <div class="fg"><label>Thâm niên (tháng)</label><input type="number" id="f-sen" value="${emp?.seniorityMonths||''}" placeholder="24" min="0"></div>
+          <div class="fg"><label>Ngày vào công ty</label><input type="date" id="f-joined" value="${emp?.joinDate||''}" oninput="calcSen()"><span class="hint">Thâm niên tự động tính từ ngày này</span></div>
+          <div class="fg"><label>Thâm niên</label><input type="text" id="f-sen-display" readonly placeholder="Tự động tính" style="background:var(--s3);color:var(--acc);font-weight:700;cursor:default"><input type="hidden" id="f-sen" value="${emp?.seniorityMonths||0}"></div>
         </div>
       </div>
     </div>
     <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal()">Hủy</button><button class="btn btn-primary" onclick="saveEmp('${emp?.id||''}')">Lưu</button></div>`);
+  setTimeout(calcSen,30);
 }
 function saveEmp(id){
   const name=document.getElementById('f-name').value.trim(); if(!name){alert('Vui lòng nhập tên');return;}
-  const data={name,branch:document.getElementById('f-branch').value,position:document.getElementById('f-pos').value,dept:document.getElementById('f-dept').value,shift:document.getElementById('f-shift').value,seniorityMonths:parseInt(document.getElementById('f-sen').value)||0};
+  const joinDate=document.getElementById('f-joined').value;
+  const seniorityMonths=joinDate?monthsFrom(joinDate):(parseInt(document.getElementById('f-sen').value)||0);
+  const data={name,branch:document.getElementById('f-branch').value,position:document.getElementById('f-pos').value,dept:document.getElementById('f-dept').value,shift:document.getElementById('f-shift').value,joinDate,seniorityMonths};
   if(id){const e=D.employees.find(x=>x.id===id);if(e)Object.assign(e,data);}
   else D.employees.push({id:uid('emp'),...data,reviews:[]});
   save();closeModal();render();

@@ -605,7 +605,7 @@ function saveEmp(id){
   const seniorityMonths=joinDate?monthsFrom(joinDate):(parseInt(document.getElementById('f-sen').value)||0);
   const data={name,branch:document.getElementById('f-branch').value,position:document.getElementById('f-pos').value,dept:document.getElementById('f-dept').value,shift:document.getElementById('f-shift').value,joinDate,seniorityMonths};
   if(id){const e=D.employees.find(x=>x.id===id);if(e)Object.assign(e,data);}
-  else D.employees.push({id:uid('emp'),...data,reviews:[]});
+  else D.employees.unshift({id:uid('emp'),...data,reviews:[]});
   save();closeModal();render();
 }
 function delEmp(id){

@@ -517,7 +517,7 @@ function revCard(rev,empId,isLatest){
     <div class="notes-grid">
       ${n.pros?`<div class="note-item"><div class="note-lbl" style="color:var(--green)">✅ Ưu điểm</div><div class="note-txt">${n.pros}</div></div>`:''}
       ${n.cons?`<div class="note-item"><div class="note-lbl" style="color:var(--red)">⚠️ Nhược điểm</div><div class="note-txt">${n.cons}</div></div>`:''}
-      ${n.managerJTBD?`<div class="note-item"><div class="note-lbl" style="color:var(--blue)">🎯 JTBD Quản lý</div><div class="note-txt">${n.managerJTBD}</div></div>`:''}
+      ${n.managerJTBD?`<div class="note-item full"><div class="note-lbl" style="color:var(--blue)">🔍 Vấn đề nhận thấy</div><div class="note-txt">${n.managerJTBD}</div></div>`:''}
       ${n.employeeWish?`<div class="note-item"><div class="note-lbl" style="color:var(--pur)">💭 Mong muốn NV</div><div class="note-txt">${n.employeeWish}</div></div>`:''}
       ${n.actionPlan?`<div class="note-item full"><div class="note-lbl" style="color:var(--ora)">🚀 Kế hoạch hành động</div><div class="note-txt">${n.actionPlan}</div></div>`:''}
     </div>`:''}
@@ -596,7 +596,7 @@ function revModal(empId,revId){
         <div class="fgrid">
           <div class="fg"><label>✅ Ưu điểm</label><textarea id="r-pros" placeholder="Điểm mạnh, thành tích...">${n.pros||''}</textarea></div>
           <div class="fg"><label>⚠️ Nhược điểm</label><textarea id="r-cons" placeholder="Điểm cần cải thiện...">${n.cons||''}</textarea></div>
-          <div class="fg"><label>🎯 JTBD của quản lý</label><textarea id="r-jtbd" placeholder="Quản lý kỳ vọng gì...">${n.managerJTBD||''}</textarea></div>
+          <div class="fg full"><label>🔍 Vấn đề nhận thấy</label><textarea id="r-jtbd" style="min-height:90px" placeholder="Vấn đề quản lý nhận thấy...">${n.managerJTBD||''}</textarea></div>
           <div class="fg"><label>💭 Mong muốn của nhân viên</label><textarea id="r-wish" placeholder="Nhân viên muốn gì...">${n.employeeWish||''}</textarea></div>
           <div class="fg full"><label>🚀 Kế hoạch hành động sau review</label><textarea id="r-action" style="min-height:90px" placeholder="Action plan cụ thể...">${n.actionPlan||''}</textarea></div>
         </div>
@@ -652,7 +652,7 @@ function exportExcel(){
     'Ngày review','Lương CB hiện tại (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)',
     'Đề xuất - NV (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
     'Lương được duyệt (đ)','Ngày duyệt',
-    '✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'
+    '✅ Ưu điểm','⚠️ Nhược điểm','🔍 Vấn đề nhận thấy','💭 Mong muốn NV','🚀 Kế hoạch hành động'
   ];
   const revRows = [];
   D.employees.forEach(e=>{
@@ -687,7 +687,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb, wsRev, 'Chi tiết review');
 
   // ── Sheet 3: Ưu nhược điểm tổng hợp ──
-  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
+  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🔍 Vấn đề nhận thấy','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
   const noteRows = [];
   D.employees.forEach(e=>{
     const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));

@@ -566,7 +566,9 @@ const calcSeniority = (officialDate) => {
 
 const totalAllowance = e => (e.allowances?.meal||0) + (e.allowances?.gas||0) + (e.allowances?.other||0);
 const latestRev = e => e.reviews?.length ? [...e.reviews].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate))[0] : null;
-const latestBasic = e => { const r=latestRev(e); return r?(r.approvedSalary||r.currentBaseSalary||0):0; };
+const latestBasic    = e => { const r=latestRev(e); return r?(r.approvedSalary||r.currentBaseSalary||0):0; };
+const currentBasic   = e => { const r=latestRev(e); return r?(r.currentBaseSalary||0):(e.luongCB||0); };
+const approvedBasic  = e => { const r=latestRev(e); return r?(r.approvedSalary||0):0; };
 const latestComm  = e => { const r=latestRev(e); return r?(r.avgCommission||0):0; };
 const latestSales = e => { const r=latestRev(e); return r?(r.avgSales6m||0):0; };
 const totalIncome = e => latestBasic(e) + latestComm(e) + totalAllowance(e);
@@ -599,15 +601,27 @@ function renderDash(){
   document.getElementById('tb-sub').textContent='Tổng quan quỹ lương & phân tích nhân sự';
   document.getElementById('tb-actions').innerHTML='';
   const emps=D.employees;
-  const totalBasic=emps.reduce((s,e)=>s+latestBasic(e),0);
-  const totalComm=emps.reduce((s,e)=>s+latestComm(e),0);
-  const totalAllow=emps.reduce((s,e)=>s+totalAllowance(e),0);
-  const totalSales=emps.reduce((s,e)=>s+latestSales(e),0);
-  const totalPay=totalBasic+totalComm+totalAllow;
+
+  // ── Trước review (currentBaseSalary)
+  const bfBasic =emps.reduce((s,e)=>s+currentBasic(e),0);
+  const bfComm  =emps.reduce((s,e)=>s+latestComm(e),0);
+  const bfAllow =emps.reduce((s,e)=>s+totalAllowance(e),0);
+  const bfPay   =bfBasic+bfComm+bfAllow;
+
+  // ── Sau review (approvedSalary, chỉ tính những người đã được duyệt)
+  const afBasic =emps.reduce((s,e)=>s+(approvedBasic(e)||currentBasic(e)),0);
+  const afComm  =bfComm;
+  const afAllow =bfAllow;
+  const afPay   =afBasic+afComm+afAllow;
+  const diffBasic=afBasic-bfBasic;
+  const diffPay  =afPay-bfPay;
+  const hasReview=emps.some(e=>approvedBasic(e)>0);
+
   const rev=D.company.revenue||0;
-  const ratio=rev>0?(totalPay/rev*100).toFixed(1):null;
+  const ratio=rev>0?(bfPay/rev*100).toFixed(1):null;
+  const ratioAf=rev>0?(afPay/rev*100).toFixed(1):null;
   const byBranch={};
-  emps.forEach(e=>{const b=e.branch||'Không rõ';if(!byBranch[b])byBranch[b]={basic:0,comm:0,allow:0,sales:0,count:0};byBranch[b].basic+=latestBasic(e);byBranch[b].comm+=latestComm(e);byBranch[b].allow+=totalAllowance(e);byBranch[b].sales+=latestSales(e);byBranch[b].count++;});
+  emps.forEach(e=>{const b=e.branch||'Không rõ';if(!byBranch[b])byBranch[b]={basic:0,comm:0,allow:0,sales:0,count:0,afBasic:0};byBranch[b].basic+=currentBasic(e);byBranch[b].afBasic+=(approvedBasic(e)||currentBasic(e));byBranch[b].comm+=latestComm(e);byBranch[b].allow+=totalAllowance(e);byBranch[b].sales+=latestSales(e);byBranch[b].count++;});
   const branches=Object.entries(byBranch).sort((a,b)=>(b[1].basic+b[1].comm)-(a[1].basic+a[1].comm));
   document.getElementById('app').innerHTML=`
     <div class="rev-bar">
@@ -616,16 +630,53 @@ function renderDash(){
       <button class="btn btn-secondary btn-sm" onclick="updRev()">Cập nhật</button>
       ${rev?`<span style="font-size:11.5px;color:var(--t3)">${fm(rev)}</span>`:''}
     </div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-lbl">Tổng nhân sự</div><div class="stat-val c-blue">${emps.length}</div><div class="stat-sub">Đang hoạt động</div></div>
-      <div class="stat-card"><div class="stat-lbl">Tổng lương cơ bản</div><div class="stat-val c-acc">${fms(totalBasic)}</div><div class="stat-sub">${fm(totalBasic)}</div></div>
-      <div class="stat-card"><div class="stat-lbl">Tổng HH / Dịch vụ</div><div class="stat-val c-pur">${fms(totalComm)}</div><div class="stat-sub">${fm(totalComm)}</div></div>
-      <div class="stat-card"><div class="stat-lbl">Tổng phụ cấp</div><div class="stat-val c-ora">${fms(totalAllow)}</div><div class="stat-sub">${fm(totalAllow)}</div></div>
-      <div class="stat-card"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green">${fms(totalPay)}</div><div class="stat-sub">${fm(totalPay)}</div></div>
-      <div class="stat-card"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal">${fms(totalSales)}</div><div class="stat-sub">Toàn công ty</div></div>
-      ${emps.length?`<div class="stat-card"><div class="stat-lbl">Lương CB TB / người</div><div class="stat-val c-ora">${fms(Math.round(totalBasic/emps.length))}</div><div class="stat-sub">Bình quân</div></div>`:''}
-      ${ratio!==null?`<div class="stat-card" style="grid-column:1/-1"><div class="stat-lbl">Tỉ lệ Quỹ lương / Doanh thu</div><div class="stat-val ${+ratio>40?'c-red':+ratio>25?'c-acc':'c-green'}">${ratio}%</div><div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div><div class="rbar-labels"><span>0%</span><span>25%</span><span>50%</span><span>100%</span></div></div>`:''}
+
+    <!-- So sánh trước / sau review -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+
+      <!-- TRƯỚC REVIEW -->
+      <div class="card" style="border-top:3px solid var(--acc)">
+        <div class="card-title" style="color:var(--acc);margin-bottom:14px">📋 Lương hiện tại <span style="font-weight:400;font-size:11px;opacity:.7">(trước review)</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng lương CB</div><div class="stat-val c-acc" style="font-size:19px">${fms(bfBasic)}</div><div class="stat-sub">${fm(bfBasic)}</div></div>
+          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng TB HH/DV</div><div class="stat-val c-pur" style="font-size:19px">${fms(bfComm)}</div><div class="stat-sub">${fm(bfComm)}</div></div>
+          <div class="stat-card" style="margin:0"><div class="stat-lbl">Phụ cấp</div><div class="stat-val c-ora" style="font-size:19px">${fms(bfAllow)}</div><div class="stat-sub">${fm(bfAllow)}</div></div>
+          <div class="stat-card" style="margin:0;background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.25)"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green" style="font-size:19px">${fms(bfPay)}</div><div class="stat-sub">${fm(bfPay)}</div></div>
+        </div>
+        ${ratio!==null?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><div style="font-size:11px;color:var(--t3);margin-bottom:5px">Quỹ lương / Doanh thu</div><div style="font-size:22px;font-weight:800;color:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}">${ratio}%</div><div class="rbar-bg" style="margin-top:5px"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div></div>`:''}
+      </div>
+
+      <!-- SAU REVIEW -->
+      <div class="card" style="border-top:3px solid var(--green)">
+        <div class="card-title" style="color:var(--green);margin-bottom:14px">✅ Lương sau review <span style="font-weight:400;font-size:11px;opacity:.7">(dự kiến)</span>${!hasReview?`<span style="font-size:10px;color:var(--t3);font-weight:400;margin-left:8px">Chưa có duyệt</span>`:''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="stat-card" style="margin:0;position:relative">
+            <div class="stat-lbl">Tổng lương CB dự kiến</div>
+            <div class="stat-val c-acc" style="font-size:19px">${fms(afBasic)}</div>
+            <div class="stat-sub">${fm(afBasic)}</div>
+            ${diffBasic!==0?`<div style="position:absolute;top:10px;right:12px;font-size:10.5px;font-weight:700;color:${diffBasic>0?'var(--green)':'var(--red)'}">${diffBasic>0?'▲':'▼'} ${fms(Math.abs(diffBasic))}</div>`:''}
+          </div>
+          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng TB HH/DV dự kiến</div><div class="stat-val c-pur" style="font-size:19px">${fms(afComm)}</div><div class="stat-sub">${fm(afComm)}</div></div>
+          <div class="stat-card" style="margin:0"><div class="stat-lbl">Phụ cấp dự kiến</div><div class="stat-val c-ora" style="font-size:19px">${fms(afAllow)}</div><div class="stat-sub">${fm(afAllow)}</div></div>
+          <div class="stat-card" style="margin:0;background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);position:relative">
+            <div class="stat-lbl">Tổng quỹ lương dự kiến</div>
+            <div class="stat-val c-green" style="font-size:19px">${fms(afPay)}</div>
+            <div class="stat-sub">${fm(afPay)}</div>
+            ${diffPay!==0?`<div style="position:absolute;top:10px;right:12px;font-size:10.5px;font-weight:700;color:${diffPay>0?'var(--green)':'var(--red)'}">${diffPay>0?'▲':'▼'} ${fms(Math.abs(diffPay))}</div>`:''}
+          </div>
+        </div>
+        ${ratioAf!==null?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><div style="font-size:11px;color:var(--t3);margin-bottom:5px">Quỹ lương dự kiến / Doanh thu</div><div style="font-size:22px;font-weight:800;color:${+ratioAf>40?'var(--red)':+ratioAf>25?'var(--acc)':'var(--green)'}">${ratioAf}%</div><div class="rbar-bg" style="margin-top:5px"><div class="rbar-fill" style="width:${Math.min(+ratioAf,100)}%;background:${+ratioAf>40?'var(--red)':+ratioAf>25?'var(--acc)':'var(--green)'}"></div></div></div>`:''}
+      </div>
     </div>
+
+    <!-- Stat cards row -->
+    <div class="stat-grid" style="margin-bottom:18px">
+      <div class="stat-card"><div class="stat-lbl">Tổng nhân sự</div><div class="stat-val c-blue">${emps.length}</div><div class="stat-sub">Đang hoạt động</div></div>
+      <div class="stat-card"><div class="stat-lbl">Đã review</div><div class="stat-val c-green">${emps.filter(e=>latestRev(e)).length}</div><div class="stat-sub">có dữ liệu review</div></div>
+      <div class="stat-card"><div class="stat-lbl">Đã duyệt lương</div><div class="stat-val c-pur">${emps.filter(e=>approvedBasic(e)>0).length}</div><div class="stat-sub">có lương được duyệt</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tăng quỹ lương</div><div class="stat-val ${diffPay>0?'c-green':'c-acc'}">${diffPay>0?'+':''}${fms(diffPay)}</div><div class="stat-sub">so với hiện tại</div></div>
+    </div>
+
     ${emps.length?`
     <div class="charts-grid">
       <div class="card"><div class="card-title">Quỹ lương theo cơ sở</div><div class="chart-box"><canvas id="ch-branch"></canvas></div></div>
@@ -634,15 +685,26 @@ function renderDash(){
     <div class="card" style="margin-bottom:18px">
       <div class="card-title">Chi tiết theo cơ sở</div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Cơ sở</th><th>Nhân sự</th><th>Lương CB</th><th>HH/DV TB</th><th>Phụ cấp</th><th>Tổng quỹ lương</th><th>DT BH TB 6th</th>${rev?'<th>% Doanh thu</th>':''}</tr></thead>
+        <thead><tr><th>Cơ sở</th><th>Nhân sự</th><th>Lương CB hiện tại</th><th>Lương CB sau duyệt</th><th>HH/DV TB</th><th>Phụ cấp</th><th>Quỹ lương hiện tại</th><th>Quỹ lương dự kiến</th><th>DT BH TB 6th</th>${rev?'<th>% DT (dự kiến)</th>':''}</tr></thead>
         <tbody>
-          ${branches.map(([n,d])=>`<tr><td><span class="badge ${branchBadge(n)}">${n}</span></td><td class="td2">${d.count} người</td><td><span class="money">${fms(d.basic)}</span></td><td><span class="money c-pur">${fms(d.comm)}</span></td><td><span class="money c-ora">${fms(d.allow)}</span></td><td><span class="money c-acc">${fms(d.basic+d.comm+d.allow)}</span></td><td><span class="money c-teal">${fms(d.sales)}</span></td>${rev?`<td class="td2">${((d.basic+d.comm+d.allow)/rev*100).toFixed(1)}%</td>`:''}</tr>`).join('')}
-          <tr class="tr-sum"><td><strong>Tổng</strong></td><td class="td2">${emps.length} người</td><td><span class="money"><strong>${fms(totalBasic)}</strong></span></td><td><span class="money c-pur"><strong>${fms(totalComm)}</strong></span></td><td><span class="money c-ora"><strong>${fms(totalAllow)}</strong></span></td><td><span class="money c-green"><strong>${fms(totalPay)}</strong></span></td><td><span class="money c-teal"><strong>${fms(totalSales)}</strong></span></td>${rev?`<td class="td2"><strong>${ratio}%</strong></td>`:''}</tr>
+          ${branches.map(([n,d])=>`<tr>
+            <td><span class="badge ${branchBadge(n)}">${n}</span></td>
+            <td class="td2">${d.count} người</td>
+            <td><span class="money">${fms(d.basic)}</span></td>
+            <td><span class="money c-green">${fms(d.afBasic)}</span>${d.afBasic>d.basic?`<span style="font-size:9.5px;color:var(--green);margin-left:4px">▲${fms(d.afBasic-d.basic)}</span>`:''}</td>
+            <td><span class="money c-pur">${fms(d.comm)}</span></td>
+            <td><span class="money c-ora">${fms(d.allow)}</span></td>
+            <td><span class="money c-acc">${fms(d.basic+d.comm+d.allow)}</span></td>
+            <td><span class="money c-green">${fms(d.afBasic+d.comm+d.allow)}</span></td>
+            <td><span class="money c-teal">${fms(d.sales)}</span></td>
+            ${rev?`<td class="td2">${((d.afBasic+d.comm+d.allow)/rev*100).toFixed(1)}%</td>`:''}
+          </tr>`).join('')}
+          <tr class="tr-sum"><td><strong>Tổng</strong></td><td class="td2">${emps.length} người</td><td><span class="money"><strong>${fms(bfBasic)}</strong></span></td><td><span class="money c-green"><strong>${fms(afBasic)}</strong></span></td><td><span class="money c-pur"><strong>${fms(bfComm)}</strong></span></td><td><span class="money c-ora"><strong>${fms(bfAllow)}</strong></span></td><td><span class="money c-acc"><strong>${fms(bfPay)}</strong></span></td><td><span class="money c-green"><strong>${fms(afPay)}</strong></span></td><td><span class="money c-teal"><strong>${fms(emps.reduce((s,e)=>s+latestSales(e),0))}</strong></span></td>${rev?`<td class="td2"><strong>${ratioAf}%</strong></td>`:''}</tr>
         </tbody>
       </table></div>
     </div>`:`<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">Chưa có dữ liệu.</div><button class="btn btn-primary" onclick="nav('employees')">👥 Đến Nhân sự</button></div>`}
   `;
-  if(emps.length) setTimeout(()=>drawCharts(branches,totalBasic,totalComm,totalAllow),60);
+  if(emps.length) setTimeout(()=>drawCharts(branches,bfBasic,bfComm,bfAllow),60);
 }
 function updRev(){ D.company.revenue=parseFloat(document.getElementById('rev-input').value)||0; save(); renderDash(); }
 function drawCharts(branches,totalBasic,totalComm,totalAllow){
@@ -668,6 +730,7 @@ function renderEmpList(){
           <th>Cơ sở</th>
           <th>Vị trí</th>
           <th>Lương CB</th>
+          <th>Lương CB duyệt</th>
           <th>HH/DV TB</th>
           <th>Tổng TN TB</th>
           <th>Phụ cấp</th>
@@ -680,10 +743,9 @@ function renderEmpList(){
 }
 function empRows(emps){
   return emps.map(e=>{
-    const basic=latestBasic(e), comm=latestComm(e), sales=latestSales(e);
+    const basic=currentBasic(e), approved=approvedBasic(e), comm=latestComm(e), sales=latestSales(e);
     const allow=totalAllowance(e), total=totalIncome(e);
     const rc=e.reviews?.length||0;
-    const sen=calcSeniority(e.officialDate);
     const allowChips=allowChipsHtml(e.allowances);
     return `<tr class="tr-click" style="cursor:pointer" onclick="nav('emp-detail',{empId:'${e.id}'})">
       <td><div style="display:flex;align-items:center;gap:9px">
@@ -693,6 +755,7 @@ function empRows(emps){
       <td><span class="badge ${branchBadge(e.branch)}">${e.branch||'—'}</span></td>
       <td><span class="badge ${posBadge(e.position)}">${e.position||'—'}</span></td>
       <td><span class="money">${basic?fms(basic):'—'}</span></td>
+      <td>${approved?`<span class="money c-green" style="font-weight:700">${fms(approved)}</span>${approved>basic?`<span style="font-size:9px;color:var(--green);margin-left:3px">▲${fms(approved-basic)}</span>`:''}` :`<span class="td2" style="font-size:10.5px">Chưa duyệt</span>`}</td>
       <td><span class="money c-pur">${comm?fms(comm):'—'}</span></td>
       <td><span class="money c-green" style="font-weight:700">${total?fms(total):'—'}</span></td>
       <td>

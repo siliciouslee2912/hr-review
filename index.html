@@ -208,6 +208,13 @@ function calcSen(){
   if(disp) disp.value=d?(sen(m)||'0 tháng'):'';
   if(hid) hid.value=m;
 }
+function calcRevSalary(){
+  const x=+document.getElementById('r-basic')?.value||0;
+  const f8=document.getElementById('r-sal-8h');
+  const fh=document.getElementById('r-sal-hourly');
+  if(f8) f8.value=x>0?Math.round(x/11*8):'';
+  if(fh) fh.value=x>0?Math.round(x/11):'';
+}
 const posBadge = p => { if(!p) return 'b-gray'; if(p.includes('QL')||p.includes('Quản')) return 'b-red'; if(p.includes('CV')||p.includes('Chuyên')) return 'b-teal'; if(p.includes('KTV')||p.includes('Kỹ')) return 'b-blue'; return 'b-gray'; };
 
 // ── CUSTOM OPTIONS ─────────────────────────────────────────────────────────────
@@ -475,8 +482,8 @@ function revCard(rev,empId,isLatest){
       <div class="sal-item"><div class="sal-lbl">Lương CB hiện tại</div><div class="sal-val">${fms(rev.currentBaseSalary)}</div></div>
       <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)}</div></div>
       <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)}</div></div>
-      ${rev.salaryMorning?`<div class="sal-item" style="background:rgba(212,160,23,.10);border:1px solid rgba(212,160,23,.2)"><div class="sal-lbl">☀️ Lương ca sáng</div><div class="sal-val c-acc">${fms(rev.salaryMorning)}</div></div>`:''}
-      ${rev.salaryAfternoon?`<div class="sal-item" style="background:rgba(56,139,253,.10);border:1px solid rgba(56,139,253,.2)"><div class="sal-lbl">🌙 Lương ca chiều</div><div class="sal-val c-blue">${fms(rev.salaryAfternoon)}</div></div>`:''}
+      ${rev.salary8h?`<div class="sal-item" style="background:rgba(212,160,23,.10);border:1px solid rgba(212,160,23,.2)"><div class="sal-lbl">⏱ Lương CB ca 8 tiếng</div><div class="sal-val c-acc">${fms(rev.salary8h)}</div></div>`:''}
+      ${rev.salaryHourly?`<div class="sal-item" style="background:rgba(188,140,255,.10);border:1px solid rgba(188,140,255,.2)"><div class="sal-lbl">🕐 Lương giờ</div><div class="sal-val c-pur">${fms(rev.salaryHourly)}</div></div>`:''}
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Nhân viên)</div><div class="sal-val c-pur">${fms(rev.empProposed)}</div></div>
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Quản lý)</div><div class="sal-val c-acc">${fms(rev.mgrProposed)}</div></div>
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Ban VH)</div><div class="sal-val c-ora">${fms(rev.opsProposed)}</div></div>
@@ -548,10 +555,10 @@ function revModal(empId,revId){
       </div>
       <div class="fsec"><div class="fsec-title">💰 Thông tin lương</div>
         <div class="fgrid">
-          <div class="fg"><label>Lương cơ bản hiện tại (đ)</label><input type="number" id="r-basic" placeholder="5000000" value="${rev?.currentBaseSalary||''}"></div>
+          <div class="fg"><label>Lương cơ bản hiện tại / 11 tiếng (đ)</label><input type="number" id="r-basic" placeholder="5000000" value="${rev?.currentBaseSalary||''}" oninput="calcRevSalary()"></div>
           <div class="fg"><label>HH / Dịch vụ trung bình (đ)</label><input type="number" id="r-comm" placeholder="3000000" value="${rev?.avgCommission||''}"></div>
-          <div class="fg"><label>☀️ Lương ca sáng (đ)</label><input type="number" id="r-sal-morning" placeholder="0" value="${rev?.salaryMorning||''}"><span class="hint">Mức lương khi làm ca sáng</span></div>
-          <div class="fg"><label>🌙 Lương ca chiều (đ)</label><input type="number" id="r-sal-afternoon" placeholder="0" value="${rev?.salaryAfternoon||''}"><span class="hint">Mức lương khi làm ca chiều</span></div>
+          <div class="fg"><label>Lương CB ca 8 tiếng (đ)</label><input type="number" id="r-sal-8h" readonly value="${rev?.salary8h||''}" style="background:var(--s3);color:var(--acc);font-weight:700;cursor:default"><span class="hint">= Lương CB ÷ 11 × 8 (tự động)</span></div>
+          <div class="fg"><label>Lương giờ (đ/giờ)</label><input type="number" id="r-sal-hourly" readonly value="${rev?.salaryHourly||''}" style="background:var(--s3);color:var(--pur);font-weight:700;cursor:default"><span class="hint">= Lương CB ÷ 11 (tự động)</span></div>
           <div class="fg"><label>DT bán hàng TB 6 tháng (đ)</label><input type="number" id="r-sales" placeholder="50000000" value="${rev?.avgSales6m||''}"><span class="hint">Doanh thu sản phẩm/dịch vụ do NV tạo ra</span></div>
           <div class="fg"><label>Đề xuất từ nhân viên (đ)</label><input type="number" id="r-emp" value="${rev?.empProposed||''}"></div>
           <div class="fg"><label>Đề xuất từ quản lý (đ)</label><input type="number" id="r-mgr" value="${rev?.mgrProposed||''}"></div>
@@ -572,11 +579,12 @@ function revModal(empId,revId){
       </div>
     </div>
     <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal()">Hủy</button><button class="btn btn-primary" onclick="saveRev('${empId}','${revId||''}')">Lưu đợt review</button></div>`);
+  setTimeout(calcRevSalary,30);
 }
 function saveRev(empId,revId){
   const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
   const d=document.getElementById('r-date').value; if(!d){alert('Chọn ngày review');return;}
-  const data={reviewDate:d,currentBaseSalary:+document.getElementById('r-basic').value||0,avgCommission:+document.getElementById('r-comm').value||0,salaryMorning:+document.getElementById('r-sal-morning').value||0,salaryAfternoon:+document.getElementById('r-sal-afternoon').value||0,avgSales6m:+document.getElementById('r-sales').value||0,empProposed:+document.getElementById('r-emp').value||0,mgrProposed:+document.getElementById('r-mgr').value||0,opsProposed:+document.getElementById('r-ops').value||0,approvedSalary:+document.getElementById('r-app').value||0,approvedDate:document.getElementById('r-appdate').value,allowance:+document.getElementById('r-allowance').value||0,notes:{pros:document.getElementById('r-pros').value.trim(),cons:document.getElementById('r-cons').value.trim(),managerJTBD:document.getElementById('r-jtbd').value.trim(),employeeWish:document.getElementById('r-wish').value.trim(),actionPlan:document.getElementById('r-action').value.trim()}};
+  const data={reviewDate:d,currentBaseSalary:+document.getElementById('r-basic').value||0,avgCommission:+document.getElementById('r-comm').value||0,salary8h:+document.getElementById('r-sal-8h').value||0,salaryHourly:+document.getElementById('r-sal-hourly').value||0,avgSales6m:+document.getElementById('r-sales').value||0,empProposed:+document.getElementById('r-emp').value||0,mgrProposed:+document.getElementById('r-mgr').value||0,opsProposed:+document.getElementById('r-ops').value||0,approvedSalary:+document.getElementById('r-app').value||0,approvedDate:document.getElementById('r-appdate').value,allowance:+document.getElementById('r-allowance').value||0,notes:{pros:document.getElementById('r-pros').value.trim(),cons:document.getElementById('r-cons').value.trim(),managerJTBD:document.getElementById('r-jtbd').value.trim(),employeeWish:document.getElementById('r-wish').value.trim(),actionPlan:document.getElementById('r-action').value.trim()}};
   if(!emp.reviews) emp.reviews=[];
   if(revId){const i=emp.reviews.findIndex(r=>r.id===revId);if(i!==-1)emp.reviews[i]={...emp.reviews[i],...data};}
   else emp.reviews.push({id:uid('rev'),...data});

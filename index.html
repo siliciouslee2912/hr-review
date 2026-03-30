@@ -44,13 +44,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--t1
 .stat-sub{font-size:10.5px;color:var(--t3);margin-top:3px}
 .c-acc{color:var(--acc)}.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-red{color:var(--red)}.c-pur{color:var(--pur)}.c-teal{color:var(--teal)}.c-ora{color:var(--ora)}
 .tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead th{text-align:left;padding:9px 11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);border-bottom:1px solid var(--bd);white-space:nowrap}
-thead th.th-group{text-align:center;color:var(--acc);border-bottom:1px solid var(--acc);font-size:9px;padding:4px 11px 4px;letter-spacing:.12em}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{text-align:left;padding:9px 13px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);border-bottom:1px solid var(--bd)}
 tbody tr{border-bottom:1px solid var(--bd);transition:background .1s}
 tbody tr:hover{background:var(--s2)}
 tbody tr:last-child{border-bottom:none}
-td{padding:9px 11px}
+td{padding:11px 13px}
 .td2{color:var(--t2);font-size:12px}
 .tr-sum{background:var(--s2)!important}
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:10.5px;font-weight:700}
@@ -60,7 +59,7 @@ td{padding:9px 11px}
 .b-red{background:var(--red-bg);color:var(--red)}.b-gray{background:var(--s3);color:var(--t2)}
 .money{font-family:'JetBrains Mono',monospace;font-weight:600}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;z-index:100;padding:36px 16px;overflow-y:auto}
-.modal{background:var(--s1);border:1px solid var(--bd);border-radius:12px;width:100%;max-width:720px;animation:mIn .18s ease}
+.modal{background:var(--s1);border:1px solid var(--bd);border-radius:12px;width:100%;max-width:680px;animation:mIn .18s ease}
 @keyframes mIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 .mhd{padding:18px 22px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .mhd-title{font-size:15px;font-weight:800}
@@ -70,13 +69,11 @@ td{padding:9px 11px}
 .fsec{margin-bottom:18px}
 .fsec-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--acc);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--bd)}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fgrid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
 label{font-size:11.5px;font-weight:700;color:var(--t2)}
 input,select,textarea{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px 11px;color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--acc)}
 input[type=number]{font-family:'JetBrains Mono',monospace}
-input[readonly]{opacity:.6;cursor:not-allowed}
 select option{background:var(--s2)}
 textarea{resize:vertical;min-height:76px;line-height:1.55}
 .hint{font-size:10.5px;color:var(--t3)}
@@ -90,7 +87,6 @@ textarea{resize:vertical;min-height:76px;line-height:1.55}
 .rev-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .rev-date{font-size:13px;font-weight:700;color:var(--acc)}
 .sal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.sal-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .sal-item{background:var(--s3);border-radius:8px;padding:9px 11px}
 .sal-lbl{font-size:9.5px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 .sal-val{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600}
@@ -121,19 +117,11 @@ textarea{resize:vertical;min-height:76px;line-height:1.55}
 .tr-click:hover td:first-child{color:var(--acc)}
 .mini-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .mini-box{background:var(--s2);border-radius:8px;padding:11px 14px}
-/* Allowance chips */
-.allow-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
-.allow-chip{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:var(--s3);color:var(--t2)}
-.allow-chip.meal{background:rgba(63,185,80,.12);color:var(--green)}
-.allow-chip.gas{background:rgba(232,130,58,.12);color:var(--ora)}
-.allow-chip.other{background:rgba(188,140,255,.12);color:var(--pur)}
-/* Section dividers in detail */
-.detail-section{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:12px}
-.detail-section-title{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:10px}
-.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.info-box{background:var(--s3);border-radius:7px;padding:8px 11px}
-.info-lbl{font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
-.info-val{font-size:12.5px;font-weight:600}
+.cmp-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(48,54,61,.5)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-lbl{font-size:12px;color:var(--t2);font-weight:500}
+.cmp-val{font-size:13px}
+.cmp-divider{height:1px;background:var(--bd);margin:8px 0}
 </style>
 </head>
 <body>
@@ -164,357 +152,10 @@ textarea{resize:vertical;min-height:76px;line-height:1.55}
 
 <script>
 // ── SEED DATA ──────────────────────────────────────────────────────────────────
-const SEED = {
-  "employees": [
-    {
-      "id": "emp_0001",
-      "name": "Linh Chi",
-      "branch": "Quan Hoa",
-      "position": "HTQL",
-      "dept": "Vận hành",
-      "shift": "Ca full",
-      "joinDate": "2022-12-01",
-      "officialDate": "2023-01-29",
-      "morningShiftSalary": 4090909,
-      "afternoonShiftSalary": 3579545,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0001", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5625000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Tay nghề xuất sắc nhất tại spa. Lượt khách triệt lông đặt nhiều nhất (ít nhất 1 ngày 1 khách đặt cả làm mặt + triệt lông). Luôn có xu hướng học thêm về sp và da. Thái độ học tập cao.", "cons": "Ko đến sớm 10p, đi hơi sát giờ làm việc.", "managerJTBD": "Lương thấp so với thâm niên, khối lượng công việc, tay nghề. Có những tháng làm HTQL mà lương chưa được 10tr trong khi làm 11 tiếng 1 ngày.", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0002",
-      "name": "Hồng Anh",
-      "branch": "Quan Hoa",
-      "position": "Chuyên viên",
-      "dept": "Kinh doanh",
-      "shift": "Ca chiều",
-      "joinDate": "2024-11-03",
-      "officialDate": "2024-03-29",
-      "morningShiftSalary": 3778355,
-      "afternoonShiftSalary": 3306061,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0002", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5000000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Tay nghề tốt, nắm rõ hầu hết các dịch vụ. Thái độ làm việc tích cực, hỗ trợ tại quầy. Gần đây thái độ hợp tác tốt, trong 4 tháng gần nhất ko có feedback. Triệt lông tốt hơn dịch vụ.", "cons": "Cần tư vấn tốt hơn về các dịch vụ chuyên sâu. Chuyên viên chưa từng được làm dịch vụ chuyên sâu -> ko biết tư vấn.", "managerJTBD": "", "employeeWish": "", "actionPlan": "Giao cho Hoa: lên plan phát triển năng lực cho HA - check in với HA."}
-      }]
-    },
-    {
-      "id": "emp_0003",
-      "name": "Lan Anh",
-      "branch": "Quan Hoa",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca chiều",
-      "joinDate": "2025-04-01",
-      "officialDate": "2025-05-01",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0003", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 3295000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Tay nghề tốt. Thái độ vui vẻ hoà đồng, teamwork tốt. Đang vừa học vừa làm (1 tuần nghỉ 1 lần) - ko bị ảnh hưởng tới công việc. Nặn mụn tốt, triệt lông tốt, khách đặt nhiều. Tư vấn được sp cơ bản.", "cons": "Cần tư vấn được các sản phẩm chuyên sâu hơn dạng điều trị.", "managerJTBD": "", "employeeWish": "", "actionPlan": "QL đề xuất lên Chuyên viên."}
-      }]
-    },
-    {
-      "id": "emp_0004",
-      "name": "Thu Hương",
-      "branch": "Quan Hoa",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2024-08-01",
-      "officialDate": "2024-09-01",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0004", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 3200000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 6000000, "mgrProposed": 5500000, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Nặn mụn - triệt lông - tay nghề tốt. Ko có khách feedback trong 4-5 tháng. Thái độ tích cực vui vẻ hoà đồng. Hỗ trợ check page - thanh toán - teamwork trong công việc. Đã tham gia Consultant. Tư vấn sản phẩm ok.", "cons": "Về dịch vụ tư vấn hơi yếu. Chưa tự tin về tư vấn dịch vụ.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0005",
-      "name": "My",
-      "branch": "Quan Hoa",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2025-08-01",
-      "officialDate": "2025-09-01",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0005", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 3295000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 5000000, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Nặn tốt, ko có feedback. Có sự phát triển về việc học sản phẩm. % bán sp ổn định. Bán sp được nhiều.", "cons": "Ko triệt lông, chỉ nặn. Chưa có nhiều khách đặt. Ko triệt nên khó tăng % cao như các nhân sự khác.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0006",
-      "name": "Quỳnh Anh",
-      "branch": "Hà Đông",
-      "position": "Chuyên viên",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2022-07-14",
-      "officialDate": "2022-08-01",
-      "morningShiftSalary": 4090909,
-      "afternoonShiftSalary": 3579545,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0006", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5625000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 12000000, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Nắm rõ cấu trúc da, tư vấn khách tốt. Có tay nghề chắc nhất trong cơ sở. Chủ động chuẩn bị mà ko cần QL nhắc. Có khả năng training nhân viên mới. Chủ động hỗ trợ team, tăng ca, chia sẻ kinh nghiệm. Giao tiếp tốt, tư vấn tự nhiên. Nhiều khách quen book, lượt book cao nhất.", "cons": "Chưa tư vấn được dịch vụ chuyên sâu. Có bị feedback để lại đầu trắng. Lâu lâu đi muộn 2 lần/tháng.", "managerJTBD": "", "employeeWish": "", "actionPlan": "Gọi điện, đưa ra tình huống cho QA - coach với sếp về kỹ năng xử lý tình huống khách hàng."}
-      }]
-    },
-    {
-      "id": "emp_0007",
-      "name": "Hạnh",
-      "branch": "Hà Đông",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca chiều",
-      "joinDate": "",
-      "officialDate": "",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0007", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4530000, "avgCommission": 3450000, "avgSales6m": 0,
-        "empProposed": 9500000, "mgrProposed": 9000000, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "PC xăng xe, tiền dịch vụ. Tổng thu nhập trung bình: 8.2tr (bao gồm cả hoa hồng hỗ trợ QH).", "cons": "Đi muộn.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0008",
-      "name": "Tú Anh",
-      "branch": "Hà Đông",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2025-07-16",
-      "officialDate": "2025-01-09",
-      "morningShiftSalary": 3526696,
-      "afternoonShiftSalary": 3085859,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0008", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4532000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 10000000, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Đã học tại SCA. Tay nghề sát với nhu cầu và quy trình. Chủ động ko cần nhắc, hỗ trợ team. Sẵn sàng tăng ca, trách nhiệm cao. Cẩn thận, chỉn chu. Nặn mụn tay tốt. Giao tiếp nhẹ nhàng, lịch sự, khách book nhiều. Siêu chủ động.", "cons": "", "managerJTBD": "", "employeeWish": "", "actionPlan": "Dự kiến lên ca full từ tháng 7/2025."}
-      }]
-    },
-    {
-      "id": "emp_0009",
-      "name": "Khánh Hà",
-      "branch": "TXS",
-      "position": "Phó QL",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "",
-      "officialDate": "2024-01-11",
-      "morningShiftSalary": 4141818,
-      "afternoonShiftSalary": 3624091,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0009", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5625000, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 7000000, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Có ý thức chủ động, bao quát. Nền tảng chuyên môn tốt. Thẳng thắn, có tư duy phát triển tốt.", "cons": "Mức lương so với chức danh đang hơi thấp.", "managerJTBD": "QL chính muốn Khánh Hà là cánh tay phải. Tập trung vào vận hành & doanh thu. Thời gian tới Hồng sẽ tập trung phát triển Khánh Hà.", "employeeWish": "", "actionPlan": "Cân nhắc xem lại vai trò trong công việc."}
-      }]
-    },
-    {
-      "id": "emp_0010",
-      "name": "Nguyễn Thị Ngọc Anh",
-      "branch": "TXS",
-      "position": "Chuyên viên",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2024-06-01",
-      "officialDate": "",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0010", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4531944, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Có tính học hỏi cao, nửa đêm vẫn đặt câu hỏi. Tốc độ phát triển nhanh. Trong đội ngũ tư vấn viên. Học ở SCA + 3am. Kê đơn, tư vấn tốt.", "cons": "Nhút nhát, bị sợ.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0011",
-      "name": "Ánh Linh",
-      "branch": "TXS",
-      "position": "Chuyên viên",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2024-10-09",
-      "officialDate": "2024-09-23",
-      "morningShiftSalary": 3778355,
-      "afternoonShiftSalary": 3306061,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0011", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5195238, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Tự tin.", "cons": "Chưa thấy mục tiêu rõ ràng.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0012",
-      "name": "Hoa Lily",
-      "branch": "TXS",
-      "position": "Chuyên viên",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2017-06-01",
-      "officialDate": "2017-06-01",
-      "morningShiftSalary": 3778355,
-      "afternoonShiftSalary": 3306061,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0012", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5195238, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 6000000, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Khách book nhiều. Tăng vì tay nghề giỏi + gắn bó lâu năm.", "cons": "Nhiều yếu tố gia đình (giới hạn phát triển). Tư vấn sản phẩm không tốt.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0013",
-      "name": "Ngân",
-      "branch": "TXS",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2022-07-14",
-      "officialDate": "2022-09-15",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0013", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4531944, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Chăm chỉ, ngoan. Gần đây khách book cao, tay nghề ổn.", "cons": "Ko có tư duy phát triển. Kỷ luật kém. Ko có kiến thức chuyên môn về da. Kỹ năng xử lý tình huống kém. Kỹ năng giao tiếp / chuyên môn yếu. Làm cho qua ngày.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0014",
-      "name": "Huyền",
-      "branch": "TXS",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca chiều",
-      "joinDate": "2025-11-01",
-      "officialDate": "2026-01-15",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0014", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4531944, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Cựu học viên của SCA. Có triển vọng về tay nghề dù mới vào. Cao hơn so với Ngân.", "cons": "Cần nâng cấp kỹ năng xử lý tình huống, tư vấn.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0015",
-      "name": "Đinh Ngọc Oanh",
-      "branch": "TXS",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2024-05-08",
-      "officialDate": "2024-10-11",
-      "morningShiftSalary": 3778355,
-      "afternoonShiftSalary": 3306061,
-      "allowances": {"meal": 520000, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0015", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 5195238, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Tự tin. CSKH tốt.", "cons": "Kiến thức chuyên môn yếu (ko upsale được dịch vụ và sp). Tay nghề cần phát triển.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    },
-    {
-      "id": "emp_0016",
-      "name": "Nguyễn Kim Oanh",
-      "branch": "TXS",
-      "position": "KTV",
-      "dept": "Kinh doanh",
-      "shift": "Ca full",
-      "joinDate": "2025-12-12",
-      "officialDate": "2026-01-15",
-      "morningShiftSalary": 3295960,
-      "afternoonShiftSalary": 2883965,
-      "allowances": {"meal": 0, "gas": 0, "other": 0},
-      "avgBaseSalary": 0,
-      "reviews": [{
-        "id": "rev_0016", "reviewDate": "2026-03-29",
-        "currentBaseSalary": 4531944, "avgCommission": 0, "avgSales6m": 0,
-        "empProposed": 0, "mgrProposed": 0, "opsProposed": 0,
-        "approvedSalary": 0, "approvedDate": "",
-        "notes": {"pros": "Cựu học viên. Có tư duy phát triển.", "cons": "Kỹ thuật + chuyên môn chưa cao.", "managerJTBD": "", "employeeWish": "", "actionPlan": ""}
-      }]
-    }
-  ],
-  "company": {"revenue": 0},
-  "nid": 200,
-  "options": {
-    "branches": ["Quan Hoa","Hà Đông","TXS"],
-    "positions": ["KTV","Chuyên viên","HTQL","Phó QL","Quản lý"],
-    "depts": ["Kinh doanh","Vận hành","Marketing","Kế toán"],
-    "shifts": ["Ca chiều","Ca full","Ca sáng","Linh hoạt"]
-  }
-};
+const SEED = {"employees":[{"id":"emp_0001","name":"Linh Chi","branch":"Quan Hoa","position":"HTQL","dept":"Vận hành","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0001","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề xuất sắc nhất tại spa. Lượt khách triệt lông đặt nhiều nhất (ít nhất 1 ngày 1 khách đặt cả làm mặt + triệt lông). Luôn có xu hướng học thêm về sp và da. Thái độ học tập cao.","cons":"Ko đến sớm 10p, đi hơi sát giờ làm việc.","managerJTBD":"Lương thấp so với thâm niên, khối lượng công việc, tay nghề. Có những tháng làm HTQL mà lương chưa được 10tr trong khi làm 11 tiếng 1 ngày.","employeeWish":"","actionPlan":""}}]},{"id":"emp_0002","name":"Hồng Anh","branch":"Quan Hoa","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0002","reviewDate":"2026-03-29","currentBaseSalary":5000000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề tốt, nắm rõ hầu hết các dịch vụ. Thái độ làm việc tích cực, hỗ trợ tại quầy. Gần đây thái độ hợp tác tốt, trong 4 tháng gần nhất ko có feedback. Triệt lông tốt hơn dịch vụ.","cons":"Cần tư vấn tốt hơn về các dịch vụ chuyên sâu. Chuyên viên chưa từng được làm dịch vụ chuyên sâu -> ko biết tư vấn.","managerJTBD":"","employeeWish":"","actionPlan":"Giao cho Hoa: lên plan phát triển năng lực cho HA - check in với HA."}}]},{"id":"emp_0003","name":"Lan Anh","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0003","reviewDate":"2026-03-29","currentBaseSalary":3295000,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tay nghề tốt. Thái độ vui vẻ hoà đồng, teamwork tốt. Đang vừa học vừa làm (1 tuần nghỉ 1 lần) - ko bị ảnh hưởng tới công việc. Nặn mụn tốt, triệt lông tốt, khách đặt nhiều. Tư vấn được sp cơ bản.","cons":"Cần tư vấn được các sản phẩm chuyên sâu hơn dạng điều trị.","managerJTBD":"","employeeWish":"","actionPlan":"QL đề xuất lên Chuyên viên."}}]},{"id":"emp_0004","name":"Thu Hương","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":24,"reviews":[{"id":"rev_0004","reviewDate":"2026-03-29","currentBaseSalary":3200000,"avgCommission":0,"avgSales6m":0,"empProposed":6000000,"mgrProposed":5500000,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nặn mụn - triệt lông - tay nghề tốt. Ko có khách feedback trong 4-5 tháng. Thái độ tích cực vui vẻ hoà đồng. Hỗ trợ check page - thanh toán - teamwork trong công việc. Đã tham gia Consultant. Tư vấn sản phẩm ok.","cons":"Về dịch vụ tư vấn hơi yếu. Chưa tự tin về tư vấn dịch vụ.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0005","name":"My","branch":"Quan Hoa","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":12,"reviews":[{"id":"rev_0005","reviewDate":"2026-03-29","currentBaseSalary":3295000,"avgCommission":0,"avgSales6m":0,"empProposed":5000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nặn tốt, ko có feedback. Có sự phát triển về việc học sản phẩm. % bán sp ổn định. Bán sp được nhiều.","cons":"Ko triệt lông, chỉ nặn. Chưa có nhiều khách đặt. Ko triệt nên khó tăng % cao như các nhân sự khác.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0006","name":"Quỳnh Anh","branch":"Hà Đông","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":36,"reviews":[{"id":"rev_0006","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":12000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Nắm rõ cấu trúc da, tư vấn khách tốt. Có tay nghề chắc nhất trong cơ sở. Chủ động chuẩn bị mà ko cần QL nhắc. Có khả năng training nhân viên mới. Chủ động hỗ trợ team, tăng ca, chia sẻ kinh nghiệm. Giao tiếp tốt, tư vấn tự nhiên. Nhiều khách quen book, lượt book cao nhất.","cons":"Chưa tư vấn được dịch vụ chuyên sâu. Có bị feedback để lại đầu trắng. Lâu lâu đi muộn 2 lần/tháng.","managerJTBD":"","employeeWish":"","actionPlan":"Gọi điện, đưa ra tình huống cho QA - coach với sếp về kỹ năng xử lý tình huống khách hàng."}}]},{"id":"emp_0007","name":"Hạnh","branch":"Hà Đông","position":"KTV","dept":"Kinh doanh","shift":"Ca chiều","seniorityMonths":0,"reviews":[{"id":"rev_0007","reviewDate":"2026-03-29","currentBaseSalary":4530000,"avgCommission":3450000,"avgSales6m":0,"empProposed":9500000,"mgrProposed":9000000,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"PC xăng xe, tiền dịch vụ. Tổng thu nhập trung bình: 8.2tr (bao gồm cả hoa hồng hỗ trợ QH).","cons":"Đi muộn.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0008","name":"Tú Anh","branch":"Hà Đông","position":"KTV","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0008","reviewDate":"2026-03-29","currentBaseSalary":4532000,"avgCommission":0,"avgSales6m":0,"empProposed":10000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Đã học tại SCA. Tay nghề sát với nhu cầu và quy trình. Chủ động ko cần nhắc, hỗ trợ team. Sẵn sàng tăng ca, trách nhiệm cao. Cẩn thận, chỉn chu. Nặn mụn tay tốt. Giao tiếp nhẹ nhàng, lịch sự, khách book nhiều. Siêu chủ động.","cons":"","managerJTBD":"","employeeWish":"","actionPlan":"Dự kiến lên ca full từ tháng 7/2025."}}]},{"id":"emp_0009","name":"Khánh Hà","branch":"TXS","position":"Phó QL","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0009","reviewDate":"2026-03-29","currentBaseSalary":5625000,"avgCommission":0,"avgSales6m":0,"empProposed":7000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Có ý thức chủ động, bao quát. Nền tảng chuyên môn tốt. Thẳng thắn, có tư duy phát triển tốt.","cons":"Mức lương so với chức danh đang hơi thấp.","managerJTBD":"QL chính muốn Khánh Hà là cánh tay phải. Tập trung vào vận hành & doanh thu. Thời gian tới Hồng sẽ tập trung phát triển Khánh Hà.","employeeWish":"","actionPlan":"Cân nhắc xem lại vai trò trong công việc."}}]},{"id":"emp_0010","name":"Nguyễn Thị Ngọc Anh","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0010","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Có tính học hỏi cao, nửa đêm vẫn đặt câu hỏi. Tốc độ phát triển nhanh. Trong đội ngũ tư vấn viên. Học ở SCA + 3am. Kê đơn, tư vấn tốt.","cons":"Nhút nhát, bị sợ.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0011","name":"Ánh Linh","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0011","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tự tin.","cons":"Chưa thấy mục tiêu rõ ràng.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0012","name":"Hoa Lily","branch":"TXS","position":"Chuyên viên","dept":"Kinh doanh","shift":"Ca full","seniorityMonths":0,"reviews":[{"id":"rev_0012","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":6000000,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Khách book nhiều. Tăng vì tay nghề giỏi + gắn bó lâu năm.","cons":"Nhiều yếu tố gia đình (giới hạn phát triển). Tư vấn sản phẩm không tốt.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0013","name":"Ngân","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0013","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Chăm chỉ, ngoan. Gần đây khách book cao, tay nghề ổn.","cons":"Ko có tư duy phát triển. Kỷ luật kém. Ko có kiến thức chuyên môn về da. Kỹ năng xử lý tình huống kém. Kỹ năng giao tiếp / chuyên môn yếu. Làm cho qua ngày.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0014","name":"Huyền","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0014","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Cựu học viên của SCA. Có triển vọng về tay nghề dù mới vào. Cao hơn so với Ngân.","cons":"Cần nâng cấp kỹ năng xử lý tình huống, tư vấn.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0015","name":"Đinh Ngọc Oanh","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0015","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Tự tin. CSKH tốt.","cons":"Kiến thức chuyên môn yếu (ko upsale được dịch vụ và sp). Tay nghề cần phát triển.","managerJTBD":"","employeeWish":"","actionPlan":""}}]},{"id":"emp_0016","name":"Nguyễn Kim Oanh","branch":"TXS","position":"KTV","dept":"Kinh doanh","shift":"","seniorityMonths":0,"reviews":[{"id":"rev_0016","reviewDate":"2026-03-29","currentBaseSalary":0,"avgCommission":0,"avgSales6m":0,"empProposed":0,"mgrProposed":0,"opsProposed":0,"approvedSalary":0,"approvedDate":"","notes":{"pros":"Cựu học viên. Có tư duy phát triển.","cons":"Kỹ thuật + chuyên môn chưa cao.","managerJTBD":"","employeeWish":"","actionPlan":""}}]}],"company":{"revenue":0},"nid":200,"options":{"branches":["Quan Hoa","Hà Đông","TXS"],"positions":["KTV","Chuyên viên","HTQL","Phó QL","Quản lý"],"depts":["Kinh doanh","Vận hành","Marketing","Kế toán"],"shifts":["Ca chiều","Ca full","Ca sáng","Linh hoạt"]}};
 
 // ── STORE ──────────────────────────────────────────────────────────────────────
-const KEY = 'hr_v4';
+const KEY = 'hr_v3';
 let D = (() => {
   try { const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); } catch(e){}
   return JSON.parse(JSON.stringify(SEED));
@@ -524,54 +165,39 @@ const uid = p => { const id=`${p}_${String(D.nid).padStart(4,'0')}`; D.nid++; sa
 const opts = () => D.options || SEED.options;
 
 // ── ROUTING ────────────────────────────────────────────────────────────────────
-let curView='dashboard', selEmp=null;
+let view='dashboard', selEmp=null;
 function nav(v,params={}){
-  curView=v; if(params.empId) selEmp=params.empId;
+  view=v; if(params.empId) selEmp=params.empId;
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   const m={dashboard:'nav-dashboard',employees:'nav-employees','emp-detail':'nav-employees'};
   const el=document.getElementById(m[v]); if(el) el.classList.add('active');
   render();
 }
 function render(){
-  if(curView==='dashboard') renderDash();
-  else if(curView==='employees') renderEmpList();
-  else if(curView==='emp-detail') renderEmpDetail(selEmp);
+  if(view==='dashboard') renderDash();
+  else if(view==='employees') renderEmpList();
+  else if(view==='emp-detail') renderEmpDetail(selEmp);
 }
 
 // ── HELPERS ────────────────────────────────────────────────────────────────────
-const fm = n => (n&&n>0)?new Intl.NumberFormat('vi-VN').format(Math.round(n))+' đ':'—';
+const fm = n => (n&&n>0)?new Intl.NumberFormat('vi-VN').format(n)+' đ':'—';
 const fms = n => {
   if(!n||n===0) return '—';
   if(n>=1e9) return (n/1e9).toFixed(1)+'B';
   if(n>=1e6) return (n/1e6).toFixed(1)+'M';
-  if(n>=1e3) return Math.round(n/1e3)+'K';
-  return String(Math.round(n));
+  if(n>=1e3) return (n/1e3).toFixed(0)+'K';
+  return String(n);
 };
 const fd = d => d?new Date(d).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
 const ini = n => {if(!n) return '?'; const w=n.trim().split(' '); return w.slice(-2).map(x=>x[0]).join('').toUpperCase();};
-
-// Tính thâm niên từ ngày chính thức đến hiện tại
-const calcSeniority = (officialDate) => {
-  if(!officialDate) return '—';
-  const start = new Date(officialDate);
-  const now = new Date('2026-03-30');
-  let totalMonths = (now.getFullYear()-start.getFullYear())*12 + (now.getMonth()-start.getMonth());
-  if(totalMonths < 0) totalMonths = 0;
-  const y = Math.floor(totalMonths/12), m = totalMonths%12;
-  if(y && m) return `${y} năm ${m} tháng`;
-  if(y) return `${y} năm`;
-  if(m) return `${m} tháng`;
-  return '< 1 tháng';
-};
-
-const totalAllowance = e => (e.allowances?.meal||0) + (e.allowances?.gas||0) + (e.allowances?.other||0);
+const sen = m => {if(!m) return '—'; const y=Math.floor(m/12),r=m%12; if(y&&r) return `${y}n ${r}th`; return y?`${y} năm`:`${m} tháng`;};
 const latestRev = e => e.reviews?.length ? [...e.reviews].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate))[0] : null;
-const latestBasic    = e => { const r=latestRev(e); return r?(r.approvedSalary||r.currentBaseSalary||0):0; };
-const currentBasic   = e => { const r=latestRev(e); return r?(r.currentBaseSalary||0):(e.luongCB||0); };
-const approvedBasic  = e => { const r=latestRev(e); return r?(r.approvedSalary||0):0; };
+const latestBasic = e => { const r=latestRev(e); return r?(r.approvedSalary||r.currentBaseSalary||0):0; };
 const latestComm  = e => { const r=latestRev(e); return r?(r.avgCommission||0):0; };
 const latestSales = e => { const r=latestRev(e); return r?(r.avgSales6m||0):0; };
-const totalIncome = e => latestBasic(e) + latestComm(e) + totalAllowance(e);
+const latestCurrentSalary   = e => { const r=latestRev(e); return r?(r.currentBaseSalary||0):0; };
+const latestApprovedSalary  = e => { const r=latestRev(e); return r?(r.approvedSalary||0):0; };
+const latestAllowance       = e => { const r=latestRev(e); return r?(r.allowance||0):0; };
 const branchBadge = b => ({'Quan Hoa':'b-blue','Hà Đông':'b-acc','TXS':'b-pur'}[b]||'b-gray');
 const posBadge = p => { if(!p) return 'b-gray'; if(p.includes('QL')||p.includes('Quản')) return 'b-red'; if(p.includes('CV')||p.includes('Chuyên')) return 'b-teal'; if(p.includes('KTV')||p.includes('Kỹ')) return 'b-blue'; return 'b-gray'; };
 
@@ -590,9 +216,17 @@ function addOpt(type, selId) {
     sel.value = v;
   }
 }
+
 function selOpts(type, selId, cur='') {
   const list = opts()[type]||[];
-  return `<div class="sel-row"><select id="${selId}"><option value="">-- Chọn --</option>${list.map(v=>`<option value="${v}" ${v===cur?'selected':''}>${v}</option>`).join('')}</select><button type="button" class="btn-plus" onclick="addOpt('${type}','${selId}')" title="Thêm mới">+</button></div>`;
+  return `
+    <div class="sel-row">
+      <select id="${selId}">
+        <option value="">-- Chọn --</option>
+        ${list.map(v=>`<option value="${v}" ${v===cur?'selected':''}>${v}</option>`).join('')}
+      </select>
+      <button type="button" class="btn-plus" onclick="addOpt('${type}','${selId}')" title="Thêm mới">+</button>
+    </div>`;
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────────
@@ -601,27 +235,21 @@ function renderDash(){
   document.getElementById('tb-sub').textContent='Tổng quan quỹ lương & phân tích nhân sự';
   document.getElementById('tb-actions').innerHTML='';
   const emps=D.employees;
-
-  // ── Trước review (currentBaseSalary)
-  const bfBasic =emps.reduce((s,e)=>s+currentBasic(e),0);
-  const bfComm  =emps.reduce((s,e)=>s+latestComm(e),0);
-  const bfAllow =emps.reduce((s,e)=>s+totalAllowance(e),0);
-  const bfPay   =bfBasic+bfComm+bfAllow;
-
-  // ── Sau review (approvedSalary, chỉ tính những người đã được duyệt)
-  const afBasic =emps.reduce((s,e)=>s+(approvedBasic(e)||currentBasic(e)),0);
-  const afComm  =bfComm;
-  const afAllow =bfAllow;
-  const afPay   =afBasic+afComm+afAllow;
-  const diffBasic=afBasic-bfBasic;
-  const diffPay  =afPay-bfPay;
-  const hasReview=emps.some(e=>approvedBasic(e)>0);
-
+  const totalBasic=emps.reduce((s,e)=>s+latestBasic(e),0);
+  const totalComm=emps.reduce((s,e)=>s+latestComm(e),0);
+  const totalSales=emps.reduce((s,e)=>s+latestSales(e),0);
+  const totalPay=totalBasic+totalComm;
+  // Before / After review
+  const totalCurrentBasic   = emps.reduce((s,e)=>s+latestCurrentSalary(e),0);
+  const totalApprovedBasic  = emps.reduce((s,e)=>s+latestApprovedSalary(e),0);
+  const totalAllowance      = emps.reduce((s,e)=>s+latestAllowance(e),0);
+  const totalPayBefore = totalCurrentBasic + totalComm + totalAllowance;
+  const totalPayAfter  = totalApprovedBasic + totalComm + totalAllowance;
+  const totalDiff      = totalPayAfter - totalPayBefore;
   const rev=D.company.revenue||0;
-  const ratio=rev>0?(bfPay/rev*100).toFixed(1):null;
-  const ratioAf=rev>0?(afPay/rev*100).toFixed(1):null;
+  const ratio=rev>0?(totalPay/rev*100).toFixed(1):null;
   const byBranch={};
-  emps.forEach(e=>{const b=e.branch||'Không rõ';if(!byBranch[b])byBranch[b]={basic:0,comm:0,allow:0,sales:0,count:0,afBasic:0};byBranch[b].basic+=currentBasic(e);byBranch[b].afBasic+=(approvedBasic(e)||currentBasic(e));byBranch[b].comm+=latestComm(e);byBranch[b].allow+=totalAllowance(e);byBranch[b].sales+=latestSales(e);byBranch[b].count++;});
+  emps.forEach(e=>{const b=e.branch||'Không rõ';if(!byBranch[b])byBranch[b]={basic:0,comm:0,sales:0,count:0,current:0,approved:0,allowance:0};byBranch[b].basic+=latestBasic(e);byBranch[b].comm+=latestComm(e);byBranch[b].sales+=latestSales(e);byBranch[b].count++;byBranch[b].current+=latestCurrentSalary(e);byBranch[b].approved+=latestApprovedSalary(e);byBranch[b].allowance+=latestAllowance(e);});
   const branches=Object.entries(byBranch).sort((a,b)=>(b[1].basic+b[1].comm)-(a[1].basic+a[1].comm));
   document.getElementById('app').innerHTML=`
     <div class="rev-bar">
@@ -630,89 +258,120 @@ function renderDash(){
       <button class="btn btn-secondary btn-sm" onclick="updRev()">Cập nhật</button>
       ${rev?`<span style="font-size:11.5px;color:var(--t3)">${fm(rev)}</span>`:''}
     </div>
-
-    <!-- So sánh trước / sau review -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
-
-      <!-- TRƯỚC REVIEW -->
-      <div class="card" style="border-top:3px solid var(--acc)">
-        <div class="card-title" style="color:var(--acc);margin-bottom:14px">📋 Lương hiện tại <span style="font-weight:400;font-size:11px;opacity:.7">(trước review)</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng lương CB</div><div class="stat-val c-acc" style="font-size:19px">${fms(bfBasic)}</div><div class="stat-sub">${fm(bfBasic)}</div></div>
-          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng TB HH/DV</div><div class="stat-val c-pur" style="font-size:19px">${fms(bfComm)}</div><div class="stat-sub">${fm(bfComm)}</div></div>
-          <div class="stat-card" style="margin:0"><div class="stat-lbl">Phụ cấp</div><div class="stat-val c-ora" style="font-size:19px">${fms(bfAllow)}</div><div class="stat-sub">${fm(bfAllow)}</div></div>
-          <div class="stat-card" style="margin:0;background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.25)"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green" style="font-size:19px">${fms(bfPay)}</div><div class="stat-sub">${fm(bfPay)}</div></div>
-        </div>
-        ${ratio!==null?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><div style="font-size:11px;color:var(--t3);margin-bottom:5px">Quỹ lương / Doanh thu</div><div style="font-size:22px;font-weight:800;color:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}">${ratio}%</div><div class="rbar-bg" style="margin-top:5px"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div></div>`:''}
-      </div>
-
-      <!-- SAU REVIEW -->
-      <div class="card" style="border-top:3px solid var(--green)">
-        <div class="card-title" style="color:var(--green);margin-bottom:14px">✅ Lương sau review <span style="font-weight:400;font-size:11px;opacity:.7">(dự kiến)</span>${!hasReview?`<span style="font-size:10px;color:var(--t3);font-weight:400;margin-left:8px">Chưa có duyệt</span>`:''}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="stat-card" style="margin:0;position:relative">
-            <div class="stat-lbl">Tổng lương CB dự kiến</div>
-            <div class="stat-val c-acc" style="font-size:19px">${fms(afBasic)}</div>
-            <div class="stat-sub">${fm(afBasic)}</div>
-            ${diffBasic!==0?`<div style="position:absolute;top:10px;right:12px;font-size:10.5px;font-weight:700;color:${diffBasic>0?'var(--green)':'var(--red)'}">${diffBasic>0?'▲':'▼'} ${fms(Math.abs(diffBasic))}</div>`:''}
-          </div>
-          <div class="stat-card" style="margin:0"><div class="stat-lbl">Tổng TB HH/DV dự kiến</div><div class="stat-val c-pur" style="font-size:19px">${fms(afComm)}</div><div class="stat-sub">${fm(afComm)}</div></div>
-          <div class="stat-card" style="margin:0"><div class="stat-lbl">Phụ cấp dự kiến</div><div class="stat-val c-ora" style="font-size:19px">${fms(afAllow)}</div><div class="stat-sub">${fm(afAllow)}</div></div>
-          <div class="stat-card" style="margin:0;background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);position:relative">
-            <div class="stat-lbl">Tổng quỹ lương dự kiến</div>
-            <div class="stat-val c-green" style="font-size:19px">${fms(afPay)}</div>
-            <div class="stat-sub">${fm(afPay)}</div>
-            ${diffPay!==0?`<div style="position:absolute;top:10px;right:12px;font-size:10.5px;font-weight:700;color:${diffPay>0?'var(--green)':'var(--red)'}">${diffPay>0?'▲':'▼'} ${fms(Math.abs(diffPay))}</div>`:''}
-          </div>
-        </div>
-        ${ratioAf!==null?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><div style="font-size:11px;color:var(--t3);margin-bottom:5px">Quỹ lương dự kiến / Doanh thu</div><div style="font-size:22px;font-weight:800;color:${+ratioAf>40?'var(--red)':+ratioAf>25?'var(--acc)':'var(--green)'}">${ratioAf}%</div><div class="rbar-bg" style="margin-top:5px"><div class="rbar-fill" style="width:${Math.min(+ratioAf,100)}%;background:${+ratioAf>40?'var(--red)':+ratioAf>25?'var(--acc)':'var(--green)'}"></div></div></div>`:''}
-      </div>
-    </div>
-
-    <!-- Stat cards row -->
-    <div class="stat-grid" style="margin-bottom:18px">
+    <div class="stat-grid">
       <div class="stat-card"><div class="stat-lbl">Tổng nhân sự</div><div class="stat-val c-blue">${emps.length}</div><div class="stat-sub">Đang hoạt động</div></div>
-      <div class="stat-card"><div class="stat-lbl">Đã review</div><div class="stat-val c-green">${emps.filter(e=>latestRev(e)).length}</div><div class="stat-sub">có dữ liệu review</div></div>
-      <div class="stat-card"><div class="stat-lbl">Đã duyệt lương</div><div class="stat-val c-pur">${emps.filter(e=>approvedBasic(e)>0).length}</div><div class="stat-sub">có lương được duyệt</div></div>
-      <div class="stat-card"><div class="stat-lbl">Tăng quỹ lương</div><div class="stat-val ${diffPay>0?'c-green':'c-acc'}">${diffPay>0?'+':''}${fms(diffPay)}</div><div class="stat-sub">so với hiện tại</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng lương cơ bản</div><div class="stat-val c-acc">${fms(totalBasic)}</div><div class="stat-sub">${fm(totalBasic)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng HH / Dịch vụ</div><div class="stat-val c-pur">${fms(totalComm)}</div><div class="stat-sub">${fm(totalComm)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green">${fms(totalPay)}</div><div class="stat-sub">${fm(totalPay)}</div></div>
+      <div class="stat-card"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal">${fms(totalSales)}</div><div class="stat-sub">Toàn công ty</div></div>
+      ${emps.length?`<div class="stat-card"><div class="stat-lbl">Lương CB TB / người</div><div class="stat-val c-ora">${fms(Math.round(totalBasic/emps.length))}</div><div class="stat-sub">Bình quân</div></div>`:''}
+      ${ratio!==null?`<div class="stat-card" style="grid-column:1/-1"><div class="stat-lbl">Tỉ lệ Quỹ lương / Doanh thu</div><div class="stat-val ${+ratio>40?'c-red':+ratio>25?'c-acc':'c-green'}">${ratio}%</div><div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div><div class="rbar-labels"><span>0%</span><span>25%</span><span>50%</span><span>100%</span></div></div>`:''}
     </div>
+
+    ${emps.length?`
+    <!-- ── SO SÁNH QUỸ LƯƠNG TRƯỚC / SAU REVIEW ── -->
+    <div class="card" style="margin-bottom:18px">
+      <div class="card-title">⚖️ So sánh quỹ lương trước & sau review</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch">
+
+        <!-- TRƯỚC REVIEW -->
+        <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px 18px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:14px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--t3);display:inline-block"></span>Trước review (hiện tại)</div>
+          <div class="cmp-row"><span class="cmp-lbl">Lương CB</span><span class="money cmp-val">${fm(totalCurrentBasic)}</span></div>
+          <div class="cmp-row"><span class="cmp-lbl">HH / DV TB</span><span class="money cmp-val c-pur">${fm(totalComm)}</span></div>
+          <div class="cmp-row"><span class="cmp-lbl">Phụ cấp</span><span class="money cmp-val c-ora">${totalAllowance>0?fm(totalAllowance):'—'}</span></div>
+          <div class="cmp-divider"></div>
+          <div class="cmp-row"><span class="cmp-lbl" style="font-weight:800;color:var(--t1)">Tổng quỹ lương</span><span class="money cmp-val c-acc" style="font-size:15px;font-weight:800">${fm(totalPayBefore)}</span></div>
+        </div>
+
+        <!-- MŨI TÊN GIỮA -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 4px">
+          <div style="font-size:22px">→</div>
+          <div style="background:${totalDiff>0?'var(--green-bg)':totalDiff<0?'var(--red-bg)':'var(--s3)'};border:1px solid ${totalDiff>0?'rgba(63,185,80,.3)':totalDiff<0?'rgba(248,81,73,.3)':'var(--bd)'};border-radius:7px;padding:5px 10px;text-align:center">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:2px">Chênh lệch</div>
+            <div class="money" style="font-size:13px;font-weight:700;color:${totalDiff>0?'var(--green)':totalDiff<0?'var(--red)':'var(--t3)'}">${totalDiff===0?'—':(totalDiff>0?'+':'')+fms(totalDiff)}</div>
+          </div>
+        </div>
+
+        <!-- SAU REVIEW -->
+        <div style="background:var(--green-bg);border:1px solid rgba(63,185,80,.25);border-radius:10px;padding:16px 18px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Sau review (dự kiến)</div>
+          <div class="cmp-row"><span class="cmp-lbl">Lương CB duyệt</span><span class="money cmp-val c-green">${fm(totalApprovedBasic)}</span></div>
+          <div class="cmp-row"><span class="cmp-lbl">HH / DV TB</span><span class="money cmp-val c-pur">${fm(totalComm)}</span></div>
+          <div class="cmp-row"><span class="cmp-lbl">Phụ cấp dự kiến</span><span class="money cmp-val c-ora">${totalAllowance>0?fm(totalAllowance):'—'}</span></div>
+          <div class="cmp-divider"></div>
+          <div class="cmp-row"><span class="cmp-lbl" style="font-weight:800;color:var(--t1)">Tổng quỹ lương dự kiến</span><span class="money cmp-val c-green" style="font-size:15px;font-weight:800">${fm(totalPayAfter)}</span></div>
+        </div>
+      </div>
+
+      <!-- BẢNG CHI TIẾT THEO CƠ SỞ (TRƯỚC / SAU) -->
+      <div style="margin-top:18px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:10px">Chi tiết theo cơ sở</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr>
+            <th rowspan="2" style="vertical-align:bottom">Cơ sở</th>
+            <th rowspan="2" style="vertical-align:bottom">Nhân sự</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--bd);color:var(--t3)">Trước review</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--bd);color:var(--green)">Sau review (dự kiến)</th>
+            <th rowspan="2" style="vertical-align:bottom;color:var(--acc)">Chênh lệch CB</th>
+          </tr><tr>
+            <th>Lương CB</th><th>HH/DV</th><th>Tổng quỹ</th>
+            <th style="color:var(--green)">Lương CB duyệt</th><th style="color:var(--green)">HH/DV</th><th style="color:var(--green)">Tổng quỹ</th>
+          </tr></thead>
+          <tbody>
+            ${branches.map(([n,d])=>{const diff=d.approved-d.current;return`<tr>
+              <td><span class="badge ${branchBadge(n)}">${n}</span></td>
+              <td class="td2">${d.count} người</td>
+              <td><span class="money">${fms(d.current)}</span></td>
+              <td><span class="money c-pur">${fms(d.comm)}</span></td>
+              <td><span class="money c-acc">${fms(d.current+d.comm+d.allowance)}</span></td>
+              <td><span class="money c-green">${d.approved>0?fms(d.approved):'—'}</span></td>
+              <td><span class="money c-pur">${fms(d.comm)}</span></td>
+              <td><span class="money c-green">${d.approved>0?fms(d.approved+d.comm+d.allowance):'—'}</span></td>
+              <td><span class="money ${diff>0?'c-green':diff<0?'c-red':'td2'}">${diff===0?'—':(diff>0?'+':'')+fms(diff)}</span></td>
+            </tr>`}).join('')}
+            <tr class="tr-sum">
+              <td><strong>Tổng</strong></td>
+              <td class="td2">${emps.length} người</td>
+              <td><span class="money"><strong>${fms(totalCurrentBasic)}</strong></span></td>
+              <td><span class="money c-pur"><strong>${fms(totalComm)}</strong></span></td>
+              <td><span class="money c-acc"><strong>${fms(totalPayBefore)}</strong></span></td>
+              <td><span class="money c-green"><strong>${totalApprovedBasic>0?fms(totalApprovedBasic):'—'}</strong></span></td>
+              <td><span class="money c-pur"><strong>${fms(totalComm)}</strong></span></td>
+              <td><span class="money c-green"><strong>${totalApprovedBasic>0?fms(totalPayAfter):'—'}</strong></span></td>
+              <td><span class="money ${totalDiff>0?'c-green':totalDiff<0?'c-red':'td2'}"><strong>${totalDiff===0?'—':(totalDiff>0?'+':'')+fms(totalDiff)}</strong></span></td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    `:''}
 
     ${emps.length?`
     <div class="charts-grid">
       <div class="card"><div class="card-title">Quỹ lương theo cơ sở</div><div class="chart-box"><canvas id="ch-branch"></canvas></div></div>
-      <div class="card"><div class="card-title">Cơ cấu lương (CB / HH / Phụ cấp)</div><div class="chart-box"><canvas id="ch-comp"></canvas></div></div>
+      <div class="card"><div class="card-title">Cơ cấu lương (CB vs HH/DV)</div><div class="chart-box"><canvas id="ch-comp"></canvas></div></div>
     </div>
     <div class="card" style="margin-bottom:18px">
       <div class="card-title">Chi tiết theo cơ sở</div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Cơ sở</th><th>Nhân sự</th><th>Lương CB hiện tại</th><th>Lương CB sau duyệt</th><th>HH/DV TB</th><th>Phụ cấp</th><th>Quỹ lương hiện tại</th><th>Quỹ lương dự kiến</th><th>DT BH TB 6th</th>${rev?'<th>% DT (dự kiến)</th>':''}</tr></thead>
+        <thead><tr><th>Cơ sở</th><th>Nhân sự</th><th>Lương CB</th><th>HH/DV</th><th>Tổng quỹ lương</th><th>DT BH TB 6th</th>${rev?'<th>% Doanh thu</th>':''}</tr></thead>
         <tbody>
-          ${branches.map(([n,d])=>`<tr>
-            <td><span class="badge ${branchBadge(n)}">${n}</span></td>
-            <td class="td2">${d.count} người</td>
-            <td><span class="money">${fms(d.basic)}</span></td>
-            <td><span class="money c-green">${fms(d.afBasic)}</span>${d.afBasic>d.basic?`<span style="font-size:9.5px;color:var(--green);margin-left:4px">▲${fms(d.afBasic-d.basic)}</span>`:''}</td>
-            <td><span class="money c-pur">${fms(d.comm)}</span></td>
-            <td><span class="money c-ora">${fms(d.allow)}</span></td>
-            <td><span class="money c-acc">${fms(d.basic+d.comm+d.allow)}</span></td>
-            <td><span class="money c-green">${fms(d.afBasic+d.comm+d.allow)}</span></td>
-            <td><span class="money c-teal">${fms(d.sales)}</span></td>
-            ${rev?`<td class="td2">${((d.afBasic+d.comm+d.allow)/rev*100).toFixed(1)}%</td>`:''}
-          </tr>`).join('')}
-          <tr class="tr-sum"><td><strong>Tổng</strong></td><td class="td2">${emps.length} người</td><td><span class="money"><strong>${fms(bfBasic)}</strong></span></td><td><span class="money c-green"><strong>${fms(afBasic)}</strong></span></td><td><span class="money c-pur"><strong>${fms(bfComm)}</strong></span></td><td><span class="money c-ora"><strong>${fms(bfAllow)}</strong></span></td><td><span class="money c-acc"><strong>${fms(bfPay)}</strong></span></td><td><span class="money c-green"><strong>${fms(afPay)}</strong></span></td><td><span class="money c-teal"><strong>${fms(emps.reduce((s,e)=>s+latestSales(e),0))}</strong></span></td>${rev?`<td class="td2"><strong>${ratioAf}%</strong></td>`:''}</tr>
+          ${branches.map(([n,d])=>`<tr><td><span class="badge ${branchBadge(n)}">${n}</span></td><td class="td2">${d.count} người</td><td><span class="money">${fms(d.basic)}</span></td><td><span class="money c-pur">${fms(d.comm)}</span></td><td><span class="money c-acc">${fms(d.basic+d.comm)}</span></td><td><span class="money c-teal">${fms(d.sales)}</span></td>${rev?`<td class="td2">${((d.basic+d.comm)/rev*100).toFixed(1)}%</td>`:''}</tr>`).join('')}
+          <tr class="tr-sum"><td><strong>Tổng</strong></td><td class="td2">${emps.length} người</td><td><span class="money"><strong>${fms(totalBasic)}</strong></span></td><td><span class="money c-pur"><strong>${fms(totalComm)}</strong></span></td><td><span class="money c-green"><strong>${fms(totalPay)}</strong></span></td><td><span class="money c-teal"><strong>${fms(totalSales)}</strong></span></td>${rev?`<td class="td2"><strong>${ratio}%</strong></td>`:''}</tr>
         </tbody>
       </table></div>
-    </div>`:`<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">Chưa có dữ liệu.</div><button class="btn btn-primary" onclick="nav('employees')">👥 Đến Nhân sự</button></div>`}
+    </div>`:
+    `<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">Chưa có dữ liệu.</div><button class="btn btn-primary" onclick="nav('employees')">👥 Đến Nhân sự</button></div>`}
   `;
-  if(emps.length) setTimeout(()=>drawCharts(branches,bfBasic,bfComm,bfAllow),60);
+  if(emps.length) setTimeout(()=>drawCharts(branches,totalBasic,totalComm),60);
 }
 function updRev(){ D.company.revenue=parseFloat(document.getElementById('rev-input').value)||0; save(); renderDash(); }
-function drawCharts(branches,totalBasic,totalComm,totalAllow){
+function drawCharts(branches,totalBasic,totalComm){
   const bCtx=document.getElementById('ch-branch');
-  if(bCtx) new Chart(bCtx,{type:'bar',data:{labels:branches.map(([n])=>n),datasets:[{label:'Lương CB',data:branches.map(([,d])=>d.basic),backgroundColor:'rgba(212,160,23,.75)',borderRadius:4},{label:'HH/DV',data:branches.map(([,d])=>d.comm),backgroundColor:'rgba(56,139,253,.75)',borderRadius:4},{label:'Phụ cấp',data:branches.map(([,d])=>d.allow),backgroundColor:'rgba(232,130,58,.65)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fms(c.raw)}`}}},scales:{x:{stacked:true,ticks:{color:'#8b949e'},grid:{color:'#21262d'}},y:{stacked:true,ticks:{color:'#8b949e',callback:v=>fms(v)},grid:{color:'#21262d'}}}}});
+  if(bCtx) new Chart(bCtx,{type:'bar',data:{labels:branches.map(([n])=>n),datasets:[{label:'Lương CB',data:branches.map(([,d])=>d.basic),backgroundColor:'rgba(212,160,23,.75)',borderRadius:4},{label:'HH/DV',data:branches.map(([,d])=>d.comm),backgroundColor:'rgba(56,139,253,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fms(c.raw)}`}}},scales:{x:{stacked:true,ticks:{color:'#8b949e'},grid:{color:'#21262d'}},y:{stacked:true,ticks:{color:'#8b949e',callback:v=>fms(v)},grid:{color:'#21262d'}}}}});
   const cCtx=document.getElementById('ch-comp');
-  const tot=totalBasic+totalComm+totalAllow;
-  if(cCtx&&tot>0) new Chart(cCtx,{type:'doughnut',data:{labels:['Lương cơ bản','HH / Dịch vụ','Phụ cấp'],datasets:[{data:[totalBasic,totalComm,totalAllow],backgroundColor:['rgba(212,160,23,.8)','rgba(56,139,253,.8)','rgba(232,130,58,.8)'],borderColor:['#d4a017','#388bfd','#e8823a'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'64%',plugins:{legend:{position:'bottom',labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11},padding:14}},tooltip:{callbacks:{label:c=>`${c.label}: ${fms(c.raw)} (${tot>0?(c.raw/tot*100).toFixed(1):0}%)`}}}}});
+  if(cCtx&&(totalBasic+totalComm)>0) new Chart(cCtx,{type:'doughnut',data:{labels:['Lương cơ bản','HH / Dịch vụ'],datasets:[{data:[totalBasic,totalComm],backgroundColor:['rgba(212,160,23,.8)','rgba(56,139,253,.8)'],borderColor:['#d4a017','#388bfd'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'64%',plugins:{legend:{position:'bottom',labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11},padding:14}},tooltip:{callbacks:{label:c=>`${c.label}: ${fms(c.raw)} (${(c.raw/(totalBasic+totalComm)*100).toFixed(1)}%)`}}}}});
 }
 
 // ── EMPLOYEE LIST ──────────────────────────────────────────────────────────────
@@ -724,59 +383,32 @@ function renderEmpList(){
     <div class="searchbar"><span style="color:var(--t3)">🔍</span><input id="q" type="text" placeholder="Tìm theo tên, cơ sở, vị trí..." oninput="filterEmps()"></div>
     ${D.employees.length===0?`<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Chưa có nhân sự nào.</div><button class="btn btn-primary" onclick="openAddEmp()">+ Thêm nhân sự</button></div>`:`
     <div class="card"><div class="tbl-wrap"><table>
-      <thead>
-        <tr>
-          <th>Nhân sự</th>
-          <th>Cơ sở</th>
-          <th>Vị trí</th>
-          <th>Lương CB</th>
-          <th>Lương CB duyệt</th>
-          <th>HH/DV TB</th>
-          <th>Tổng TN TB</th>
-          <th>Phụ cấp</th>
-          <th>DT BH TB</th>
-          <th></th>
-        </tr>
-      </thead>
+      <thead><tr><th>Nhân sự</th><th>Cơ sở</th><th>Chức danh</th><th>Ca</th><th>Thâm niên</th><th>Lương CB (trước)</th><th>Lương CB duyệt</th><th>HH/DV TB</th><th>DT BH TB 6th</th><th>Reviews</th><th></th></tr></thead>
       <tbody id="emp-tb">${empRows(D.employees)}</tbody>
     </table></div></div>`}`;
 }
 function empRows(emps){
   return emps.map(e=>{
-    const basic=currentBasic(e), approved=approvedBasic(e), comm=latestComm(e), sales=latestSales(e);
-    const allow=totalAllowance(e), total=totalIncome(e);
-    const rc=e.reviews?.length||0;
-    const allowChips=allowChipsHtml(e.allowances);
+    const basic=latestBasic(e),comm=latestComm(e),sales=latestSales(e),rc=e.reviews?.length||0;
+    const currentSal=latestCurrentSalary(e), approvedSal=latestApprovedSalary(e);
+    const diff = approvedSal>0&&currentSal>0 ? approvedSal-currentSal : null;
     return `<tr class="tr-click" style="cursor:pointer" onclick="nav('emp-detail',{empId:'${e.id}'})">
-      <td><div style="display:flex;align-items:center;gap:9px">
-        <div style="width:30px;height:30px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#0d1117;flex-shrink:0">${ini(e.name)}</div>
-        <div><div style="font-weight:700">${e.name}</div><div class="td2" style="font-size:10.5px">${e.dept||''}</div></div>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#0d1117;flex-shrink:0">${ini(e.name)}</div><span style="font-weight:700">${e.name}</span></div></td>
       <td><span class="badge ${branchBadge(e.branch)}">${e.branch||'—'}</span></td>
       <td><span class="badge ${posBadge(e.position)}">${e.position||'—'}</span></td>
-      <td><span class="money">${basic?fms(basic):'—'}</span></td>
-      <td>${approved?`<span class="money c-green" style="font-weight:700">${fms(approved)}</span>${approved>basic?`<span style="font-size:9px;color:var(--green);margin-left:3px">▲${fms(approved-basic)}</span>`:''}` :`<span class="td2" style="font-size:10.5px">Chưa duyệt</span>`}</td>
-      <td><span class="money c-pur">${comm?fms(comm):'—'}</span></td>
-      <td><span class="money c-green" style="font-weight:700">${total?fms(total):'—'}</span></td>
-      <td>
-        <span class="money c-ora">${allow?fms(allow):'—'}</span>
-        ${allow?`<div class="allow-chips">${allowChips}</div>`:''}
-      </td>
-      <td><span class="money c-teal">${sales?fms(sales):'—'}</span></td>
-      <td onclick="event.stopPropagation()"><div class="flex-gap">
-        <button class="btn btn-ghost btn-sm" onclick="openEditEmp('${e.id}')">✏️</button>
-        <button class="btn btn-danger btn-sm" onclick="delEmp('${e.id}')">🗑️</button>
+      <td class="td2">${e.shift||'—'}</td>
+      <td class="td2">${sen(e.seniorityMonths)}</td>
+      <td><span class="money td2">${currentSal?fms(currentSal):'—'}</span></td>
+      <td><div style="display:flex;flex-direction:column;gap:2px">
+        <span class="money c-green">${approvedSal?fms(approvedSal):'—'}</span>
+        ${diff!==null?`<span style="font-size:10px;color:${diff>0?'var(--green)':diff<0?'var(--red)':'var(--t3)'}">${diff>0?'+':''}${fms(diff)}</span>`:''}
       </div></td>
+      <td><span class="money c-pur">${comm?fms(comm):'—'}</span></td>
+      <td><span class="money c-teal">${sales?fms(sales):'—'}</span></td>
+      <td><span class="badge b-acc">${rc} đợt</span></td>
+      <td onclick="event.stopPropagation()"><div class="flex-gap"><button class="btn btn-ghost btn-sm" onclick="openEditEmp('${e.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="delEmp('${e.id}')">🗑️</button></div></td>
     </tr>`;
   }).join('');
-}
-function allowChipsHtml(a){
-  if(!a) return '';
-  let html='';
-  if(a.meal) html+=`<span class="allow-chip meal">🍱 ${fms(a.meal)}</span>`;
-  if(a.gas) html+=`<span class="allow-chip gas">⛽ ${fms(a.gas)}</span>`;
-  if(a.other) html+=`<span class="allow-chip other">+ ${fms(a.other)}</span>`;
-  return html;
 }
 function filterEmps(){
   const q=document.getElementById('q').value.toLowerCase();
@@ -792,13 +424,9 @@ function renderEmpDetail(id){
   document.getElementById('tb-actions').innerHTML=`<button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm đợt review</button>`;
   const revs=[...(emp.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
   const latest=revs[0];
-  const sen=calcSeniority(emp.officialDate);
-  const allow=emp.allowances||{meal:0,gas:0,other:0};
-  const totalAllow=totalAllowance(emp);
-
   document.getElementById('app').innerHTML=`
     <button class="back-btn" onclick="nav('employees')">← Quay lại</button>
-    <div class="card" style="margin-bottom:14px">
+    <div class="card" style="margin-bottom:18px">
       <div class="emp-hd">
         <div class="avatar">${ini(emp.name)}</div>
         <div style="flex:1">
@@ -807,57 +435,24 @@ function renderEmpDetail(id){
             <span class="meta-i">🏢 ${emp.branch||'Chưa rõ'}</span>
             <span class="meta-i">💼 ${emp.position||'Chưa rõ'}</span>
             <span class="meta-i">🏷 ${emp.dept||'Chưa rõ'}</span>
-            <span class="meta-i">🕐 ${emp.shift||'—'}</span>
+            <span class="meta-i">🕐 ${emp.shift||'Chưa rõ ca'}</span>
+            <span class="meta-i">⏱ ${sen(emp.seniorityMonths)}</span>
           </div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="openEditEmp('${emp.id}')">✏️ Sửa</button>
       </div>
-
-      <!-- Thâm niên -->
-      <div class="detail-section">
-        <div class="detail-section-title">📅 Thâm niên</div>
-        <div class="info-grid">
-          <div class="info-box"><div class="info-lbl">Ngày vào công ty</div><div class="info-val">${emp.joinDate?fd(emp.joinDate):'—'}</div></div>
-          <div class="info-box"><div class="info-lbl">Ngày chính thức</div><div class="info-val">${emp.officialDate?fd(emp.officialDate):'—'}</div></div>
-          <div class="info-box"><div class="info-lbl">Thâm niên</div><div class="info-val c-acc">${sen}</div></div>
-        </div>
-      </div>
-
-      <!-- Lương -->
-      <div class="detail-section">
-        <div class="detail-section-title">💰 Thông tin lương</div>
-        <div class="sal-grid-4">
-          <div class="sal-item"><div class="sal-lbl">Lương cơ bản</div><div class="sal-val c-acc">${latest?fms(latest.approvedSalary||latest.currentBaseSalary||0):'—'}</div></div>
-          <div class="sal-item"><div class="sal-lbl">Lương CB trung bình</div><div class="sal-val c-teal">${emp.avgBaseSalary?fms(emp.avgBaseSalary):'—'}</div></div>
-          <div class="sal-item"><div class="sal-lbl">Lương ca sáng</div><div class="sal-val c-blue">${emp.morningShiftSalary?fms(emp.morningShiftSalary):'—'}</div></div>
-          <div class="sal-item"><div class="sal-lbl">Lương ca chiều</div><div class="sal-val c-pur">${emp.afternoonShiftSalary?fms(emp.afternoonShiftSalary):'—'}</div></div>
-        </div>
-        ${latest?`<div class="sal-grid">
-          <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(latest.avgCommission||0)}</div></div>
-          <div class="sal-item"><div class="sal-lbl">DT bán hàng TB 6th</div><div class="sal-val c-teal">${fms(latest.avgSales6m||0)}</div></div>
-          <div class="sal-item"><div class="sal-lbl">Tổng TN TB</div><div class="sal-val c-green">${fms(totalIncome(emp))}</div></div>
-        </div>`:''}
-      </div>
-
-      <!-- Phụ cấp -->
-      <div class="detail-section">
-        <div class="detail-section-title">🎁 Phụ cấp</div>
-        <div class="info-grid">
-          <div class="info-box"><div class="info-lbl">Phụ cấp ăn ca</div><div class="info-val c-green">${allow.meal?fm(allow.meal):'—'}</div></div>
-          <div class="info-box"><div class="info-lbl">Phụ cấp xăng xe</div><div class="info-val c-ora">${allow.gas?fm(allow.gas):'—'}</div></div>
-          <div class="info-box"><div class="info-lbl">Phụ cấp khác</div><div class="info-val c-pur">${allow.other?fm(allow.other):'—'}</div></div>
-        </div>
-        ${totalAllow?`<div style="margin-top:8px;padding:8px 11px;background:var(--acc-bg);border-radius:7px;font-size:12.5px;font-weight:700;color:var(--acc)">Tổng phụ cấp: ${fm(totalAllow)}</div>`:``}
-      </div>
+      ${latest?`<div class="mini-3">
+        <div class="mini-box"><div class="stat-lbl">Lương cơ bản hiện tại</div><div class="stat-val c-acc" style="font-size:17px">${fms(latest.approvedSalary||latest.currentBaseSalary||0)}</div></div>
+        <div class="mini-box"><div class="stat-lbl">HH / Dịch vụ TB</div><div class="stat-val c-pur" style="font-size:17px">${fms(latest.avgCommission||0)}</div></div>
+        <div class="mini-box"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal" style="font-size:17px">${fms(latest.avgSales6m||0)}</div></div>
+      </div>`:''}
     </div>
-
     <div class="row-actions">
       <div style="font-size:13.5px;font-weight:800">Lịch sử review (${revs.length} đợt)</div>
       <button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm đợt review</button>
     </div>
     ${revs.length===0?`<div class="empty"><div class="empty-ico">💰</div><div class="empty-txt">Chưa có đợt review nào</div><button class="btn btn-primary" onclick="openAddRev('${emp.id}')">+ Thêm</button></div>`:revs.map((r,i)=>revCard(r,emp.id,i===0)).join('')}`;
 }
-
 function revCard(rev,empId,isLatest){
   const raise=(rev.approvedSalary&&rev.currentBaseSalary)?rev.approvedSalary-rev.currentBaseSalary:null;
   const n=rev.notes||{};
@@ -871,11 +466,13 @@ function revCard(rev,empId,isLatest){
       <div class="sal-item"><div class="sal-lbl">Lương CB hiện tại</div><div class="sal-val">${fms(rev.currentBaseSalary)}</div></div>
       <div class="sal-item"><div class="sal-lbl">HH / Dịch vụ TB</div><div class="sal-val c-pur">${fms(rev.avgCommission)}</div></div>
       <div class="sal-item"><div class="sal-lbl">DT BH TB 6 tháng</div><div class="sal-val c-teal">${fms(rev.avgSales6m)}</div></div>
+      ${rev.salaryMorning?`<div class="sal-item" style="background:rgba(212,160,23,.10);border:1px solid rgba(212,160,23,.2)"><div class="sal-lbl">☀️ Lương ca sáng</div><div class="sal-val c-acc">${fms(rev.salaryMorning)}</div></div>`:''}
+      ${rev.salaryAfternoon?`<div class="sal-item" style="background:rgba(56,139,253,.10);border:1px solid rgba(56,139,253,.2)"><div class="sal-lbl">🌙 Lương ca chiều</div><div class="sal-val c-blue">${fms(rev.salaryAfternoon)}</div></div>`:''}
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Nhân viên)</div><div class="sal-val c-pur">${fms(rev.empProposed)}</div></div>
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Quản lý)</div><div class="sal-val c-acc">${fms(rev.mgrProposed)}</div></div>
       <div class="sal-item"><div class="sal-lbl">Đề xuất (Ban VH)</div><div class="sal-val c-ora">${fms(rev.opsProposed)}</div></div>
     </div>
-    ${rev.approvedSalary?`<div class="sal-approved"><div><div class="sal-app-lbl">✅ Lương được duyệt chính thức</div>${rev.approvedDate?`<div style="font-size:10.5px;color:var(--green);opacity:.8">Ngày duyệt: ${fd(rev.approvedDate)}</div>`:''} ${raise!==null?`<div style="font-size:10.5px;color:var(--green);margin-top:2px">Chênh lệch: ${raise>0?'+':''}${fms(raise)}</div>`:''}</div><div class="sal-app-val">${fm(rev.approvedSalary)}</div></div>`:''}
+    ${rev.approvedSalary?`<div class="sal-approved"><div><div class="sal-app-lbl">✅ Lương được duyệt chính thức</div>${rev.approvedDate?`<div style="font-size:10.5px;color:var(--green);opacity:.8">Ngày duyệt: ${fd(rev.approvedDate)}</div>`:''} ${raise!==null?`<div style="font-size:10.5px;color:var(--green);margin-top:2px">Chênh lệch CB: ${raise>0?'+':''}${fms(raise)}</div>`:''} ${rev.allowance?`<div style="font-size:10.5px;color:var(--ora);margin-top:2px">Phụ cấp: +${fms(rev.allowance)}</div>`:''}</div><div style="text-align:right"><div class="sal-app-val">${fm(rev.approvedSalary)}</div>${rev.allowance?`<div style="font-size:10px;color:var(--green);opacity:.8">Tổng: ${fm((rev.approvedSalary||0)+(rev.avgCommission||0)+(rev.allowance||0))}</div>`:''}</div></div>`:''}
     ${hasNote?`<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:7px">📝 Ghi chú review</div>
     <div class="notes-grid">
       ${n.pros?`<div class="note-item"><div class="note-lbl" style="color:var(--green)">✅ Ưu điểm</div><div class="note-txt">${n.pros}</div></div>`:''}
@@ -895,10 +492,9 @@ function showModal(html){document.getElementById('modal-root').innerHTML=`<div c
 function openAddEmp(){empModal(null);}
 function openEditEmp(id){empModal(D.employees.find(e=>e.id===id));}
 function empModal(emp){
-  const a=emp?.allowances||{meal:0,gas:0,other:0};
   showModal(`
     <div class="mhd"><div class="mhd-title">${emp?'Sửa nhân sự':'Thêm nhân sự mới'}</div><button class="m-close" onclick="closeModal()">✕</button></div>
-    <div class="mbody" style="max-height:78vh;overflow-y:auto">
+    <div class="mbody">
       <div class="fsec"><div class="fsec-title">👤 Thông tin cơ bản</div>
         <div class="fgrid">
           <div class="fg full"><label>Họ & Tên *</label><input id="f-name" value="${emp?.name||''}" placeholder="Nguyễn Văn A"></div>
@@ -906,67 +502,22 @@ function empModal(emp){
           <div class="fg"><label>Chức danh</label>${selOpts('positions','f-pos',emp?.position||'')}</div>
           <div class="fg"><label>Phòng ban</label>${selOpts('depts','f-dept',emp?.dept||'')}</div>
           <div class="fg"><label>Ca làm việc</label>${selOpts('shifts','f-shift',emp?.shift||'')}</div>
-        </div>
-      </div>
-      <div class="fsec"><div class="fsec-title">📅 Thâm niên</div>
-        <div class="fgrid">
-          <div class="fg"><label>Ngày vào công ty</label><input type="date" id="f-joindate" value="${emp?.joinDate||''}"></div>
-          <div class="fg"><label>Ngày chính thức</label><input type="date" id="f-officialdate" value="${emp?.officialDate||''}"></div>
-          <div class="fg"><label>Thâm niên (tự tính)</label><input readonly id="f-sen-display" value="${emp?.officialDate?calcSeniority(emp.officialDate):''}" placeholder="Tự tính từ ngày chính thức"></div>
-        </div>
-      </div>
-      <div class="fsec"><div class="fsec-title">💰 Thông tin lương</div>
-        <div class="fgrid">
-          <div class="fg"><label>Lương ca sáng (đ)</label><input type="number" id="f-morning" value="${emp?.morningShiftSalary||''}" placeholder="Tự tính từ lương CB"></div>
-          <div class="fg"><label>Lương ca chiều (đ)</label><input type="number" id="f-afternoon" value="${emp?.afternoonShiftSalary||''}" placeholder="Tự tính từ lương CB"></div>
-          <div class="fg"><label>Lương CB trung bình (đ)</label><input type="number" id="f-avgbasic" value="${emp?.avgBaseSalary||''}" placeholder="Để trống — điền sau"></div>
-        </div>
-      </div>
-      <div class="fsec"><div class="fsec-title">🎁 Phụ cấp</div>
-        <div class="fgrid-3">
-          <div class="fg"><label>Phụ cấp ăn ca (đ/tháng)</label><input type="number" id="f-meal" value="${a.meal||''}" placeholder="520000"></div>
-          <div class="fg"><label>Phụ cấp xăng xe (đ/tháng)</label><input type="number" id="f-gas" value="${a.gas||''}" placeholder="300000"></div>
-          <div class="fg"><label>Phụ cấp khác (đ/tháng)</label><input type="number" id="f-other" value="${a.other||''}" placeholder="0"></div>
+          <div class="fg"><label>Thâm niên (tháng)</label><input type="number" id="f-sen" value="${emp?.seniorityMonths||''}" placeholder="24" min="0"></div>
         </div>
       </div>
     </div>
     <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal()">Hủy</button><button class="btn btn-primary" onclick="saveEmp('${emp?.id||''}')">Lưu</button></div>`);
-
-  // Auto-update seniority display on date change
-  const officialInput = document.getElementById('f-officialdate');
-  const senDisplay = document.getElementById('f-sen-display');
-  if(officialInput && senDisplay){
-    officialInput.addEventListener('change', () => {
-      senDisplay.value = officialInput.value ? calcSeniority(officialInput.value) : '';
-    });
-  }
 }
 function saveEmp(id){
   const name=document.getElementById('f-name').value.trim(); if(!name){alert('Vui lòng nhập tên');return;}
-  const data={
-    name,
-    branch:document.getElementById('f-branch').value,
-    position:document.getElementById('f-pos').value,
-    dept:document.getElementById('f-dept').value,
-    shift:document.getElementById('f-shift').value,
-    joinDate:document.getElementById('f-joindate').value,
-    officialDate:document.getElementById('f-officialdate').value,
-    morningShiftSalary:+document.getElementById('f-morning').value||0,
-    afternoonShiftSalary:+document.getElementById('f-afternoon').value||0,
-    avgBaseSalary:+document.getElementById('f-avgbasic').value||0,
-    allowances:{
-      meal:+document.getElementById('f-meal').value||0,
-      gas:+document.getElementById('f-gas').value||0,
-      other:+document.getElementById('f-other').value||0
-    }
-  };
+  const data={name,branch:document.getElementById('f-branch').value,position:document.getElementById('f-pos').value,dept:document.getElementById('f-dept').value,shift:document.getElementById('f-shift').value,seniorityMonths:parseInt(document.getElementById('f-sen').value)||0};
   if(id){const e=D.employees.find(x=>x.id===id);if(e)Object.assign(e,data);}
   else D.employees.push({id:uid('emp'),...data,reviews:[]});
   save();closeModal();render();
 }
 function delEmp(id){
   const e=D.employees.find(x=>x.id===id); if(!e||!confirm(`Xóa nhân sự "${e.name}"?`))return;
-  D.employees=D.employees.filter(x=>x.id!==id); save(); if(curView==='emp-detail')nav('employees');else render();
+  D.employees=D.employees.filter(x=>x.id!==id); save(); if(view==='emp-detail')nav('employees');else render();
 }
 
 // ── REVIEW MODAL ───────────────────────────────────────────────────────────────
@@ -986,12 +537,15 @@ function revModal(empId,revId){
         <div class="fgrid">
           <div class="fg"><label>Lương cơ bản hiện tại (đ)</label><input type="number" id="r-basic" placeholder="5000000" value="${rev?.currentBaseSalary||''}"></div>
           <div class="fg"><label>HH / Dịch vụ trung bình (đ)</label><input type="number" id="r-comm" placeholder="3000000" value="${rev?.avgCommission||''}"></div>
+          <div class="fg"><label>☀️ Lương ca sáng (đ)</label><input type="number" id="r-sal-morning" placeholder="0" value="${rev?.salaryMorning||''}"><span class="hint">Mức lương khi làm ca sáng</span></div>
+          <div class="fg"><label>🌙 Lương ca chiều (đ)</label><input type="number" id="r-sal-afternoon" placeholder="0" value="${rev?.salaryAfternoon||''}"><span class="hint">Mức lương khi làm ca chiều</span></div>
           <div class="fg"><label>DT bán hàng TB 6 tháng (đ)</label><input type="number" id="r-sales" placeholder="50000000" value="${rev?.avgSales6m||''}"><span class="hint">Doanh thu sản phẩm/dịch vụ do NV tạo ra</span></div>
           <div class="fg"><label>Đề xuất từ nhân viên (đ)</label><input type="number" id="r-emp" value="${rev?.empProposed||''}"></div>
           <div class="fg"><label>Đề xuất từ quản lý (đ)</label><input type="number" id="r-mgr" value="${rev?.mgrProposed||''}"></div>
           <div class="fg"><label>Đề xuất từ ban vận hành (đ)</label><input type="number" id="r-ops" value="${rev?.opsProposed||''}"></div>
           <div class="fg"><label>Lương được duyệt chính thức (đ)</label><input type="number" id="r-app" value="${rev?.approvedSalary||''}"></div>
           <div class="fg"><label>Ngày duyệt chính thức</label><input type="date" id="r-appdate" value="${rev?.approvedDate||''}"></div>
+          <div class="fg"><label>Phụ cấp (đ) — sau review</label><input type="number" id="r-allowance" placeholder="0" value="${rev?.allowance||''}"><span class="hint">Xăng xe, điện thoại, chuyên cần…</span></div>
         </div>
       </div>
       <div class="fsec"><div class="fsec-title">📝 Ghi chú review</div>
@@ -1009,7 +563,7 @@ function revModal(empId,revId){
 function saveRev(empId,revId){
   const emp=D.employees.find(e=>e.id===empId); if(!emp)return;
   const d=document.getElementById('r-date').value; if(!d){alert('Chọn ngày review');return;}
-  const data={reviewDate:d,currentBaseSalary:+document.getElementById('r-basic').value||0,avgCommission:+document.getElementById('r-comm').value||0,avgSales6m:+document.getElementById('r-sales').value||0,empProposed:+document.getElementById('r-emp').value||0,mgrProposed:+document.getElementById('r-mgr').value||0,opsProposed:+document.getElementById('r-ops').value||0,approvedSalary:+document.getElementById('r-app').value||0,approvedDate:document.getElementById('r-appdate').value,notes:{pros:document.getElementById('r-pros').value.trim(),cons:document.getElementById('r-cons').value.trim(),managerJTBD:document.getElementById('r-jtbd').value.trim(),employeeWish:document.getElementById('r-wish').value.trim(),actionPlan:document.getElementById('r-action').value.trim()}};
+  const data={reviewDate:d,currentBaseSalary:+document.getElementById('r-basic').value||0,avgCommission:+document.getElementById('r-comm').value||0,salaryMorning:+document.getElementById('r-sal-morning').value||0,salaryAfternoon:+document.getElementById('r-sal-afternoon').value||0,avgSales6m:+document.getElementById('r-sales').value||0,empProposed:+document.getElementById('r-emp').value||0,mgrProposed:+document.getElementById('r-mgr').value||0,opsProposed:+document.getElementById('r-ops').value||0,approvedSalary:+document.getElementById('r-app').value||0,approvedDate:document.getElementById('r-appdate').value,allowance:+document.getElementById('r-allowance').value||0,notes:{pros:document.getElementById('r-pros').value.trim(),cons:document.getElementById('r-cons').value.trim(),managerJTBD:document.getElementById('r-jtbd').value.trim(),employeeWish:document.getElementById('r-wish').value.trim(),actionPlan:document.getElementById('r-action').value.trim()}};
   if(!emp.reviews) emp.reviews=[];
   if(revId){const i=emp.reviews.findIndex(r=>r.id===revId);if(i!==-1)emp.reviews[i]={...emp.reviews[i],...data};}
   else emp.reviews.push({id:uid('rev'),...data});
@@ -1024,30 +578,99 @@ function delRev(empId,revId){
 // ── EXPORT EXCEL ───────────────────────────────────────────────────────────────
 function exportExcel(){
   const wb = XLSX.utils.book_new();
-  const sumHeader = ['Họ & Tên','Cơ sở','Chức danh','Ca làm việc','Ngày vào CT','Ngày chính thức','Thâm niên','Lương CB mới nhất','Lương CB TB','Lương ca sáng','Lương ca chiều','PC ăn ca','PC xăng xe','PC khác','Tổng phụ cấp','HH/DV TB','DT BH TB 6th','Tổng TN TB','Số đợt review'];
+
+  // ── Sheet 1: Tổng hợp nhân sự ──
+  const sumHeader = ['Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc','Thâm niên (tháng)','Số đợt review','Lương CB mới nhất (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)'];
   const sumRows = D.employees.map(e=>{
     const r = latestRev(e);
-    const a = e.allowances||{};
-    const tAllow = (a.meal||0)+(a.gas||0)+(a.other||0);
     return [
-      e.name||'',e.branch||'',e.position||'',e.shift||'',
-      e.joinDate||'',e.officialDate||'',calcSeniority(e.officialDate),
+      e.name||'',
+      e.branch||'',
+      e.position||'',
+      e.dept||'',
+      e.shift||'',
+      e.seniorityMonths||0,
+      e.reviews?.length||0,
       r?(r.approvedSalary||r.currentBaseSalary||0):0,
-      e.avgBaseSalary||0,
-      e.morningShiftSalary||0,e.afternoonShiftSalary||0,
-      a.meal||0,a.gas||0,a.other||0,tAllow,
-      r?(r.avgCommission||0):0,r?(r.avgSales6m||0):0,
-      (r?(r.approvedSalary||r.currentBaseSalary||0):0)+(r?(r.avgCommission||0):0)+tAllow,
-      e.reviews?.length||0
+      r?(r.avgCommission||0):0,
+      r?(r.avgSales6m||0):0
     ];
   });
-  const ws = XLSX.utils.aoa_to_sheet([sumHeader,...sumRows]);
-  ws['!cols'] = [20,12,14,12,13,13,15,16,14,14,14,12,12,12,13,14,14,14,8].map(w=>({wch:w}));
-  XLSX.utils.book_append_sheet(wb, ws, 'Tổng hợp nhân sự');
-  XLSX.writeFile(wb, `HR_Review_${new Date().toISOString().slice(0,10)}.xlsx`);
+  const wsSum = XLSX.utils.aoa_to_sheet([sumHeader,...sumRows]);
+  // Column widths
+  wsSum['!cols'] = [22,14,14,14,14,10,10,18,18,18].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsSum, 'Tổng hợp nhân sự');
+
+  // ── Sheet 2: Chi tiết đợt review ──
+  const revHeader = [
+    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca',
+    'Ngày review','Lương CB hiện tại (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)',
+    'Đề xuất - NV (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
+    'Lương được duyệt (đ)','Ngày duyệt',
+    '✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'
+  ];
+  const revRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      revRows.push([
+        e.name||'',
+        e.branch||'',
+        e.position||'',
+        e.dept||'',
+        e.shift||'',
+        r.reviewDate||'',
+        r.currentBaseSalary||0,
+        r.avgCommission||0,
+        r.avgSales6m||0,
+        r.empProposed||0,
+        r.mgrProposed||0,
+        r.opsProposed||0,
+        r.approvedSalary||0,
+        r.approvedDate||'',
+        n.pros||'',
+        n.cons||'',
+        n.managerJTBD||'',
+        n.employeeWish||'',
+        n.actionPlan||''
+      ]);
+    });
+  });
+  const wsRev = XLSX.utils.aoa_to_sheet([revHeader,...revRows]);
+  wsRev['!cols'] = [22,14,14,14,12,14,18,16,18,18,18,16,18,14,40,40,40,40,50].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsRev, 'Chi tiết review');
+
+  // ── Sheet 3: Ưu nhược điểm tổng hợp ──
+  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🎯 JTBD Quản lý','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
+  const noteRows = [];
+  D.employees.forEach(e=>{
+    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    revs.forEach(r=>{
+      const n = r.notes||{};
+      if(n.pros||n.cons||n.managerJTBD||n.employeeWish||n.actionPlan){
+        noteRows.push([
+          e.name||'',
+          e.branch||'',
+          e.position||'',
+          r.reviewDate||'',
+          n.pros||'',
+          n.cons||'',
+          n.managerJTBD||'',
+          n.employeeWish||'',
+          n.actionPlan||''
+        ]);
+      }
+    });
+  });
+  const wsNote = XLSX.utils.aoa_to_sheet([noteHeader,...noteRows]);
+  wsNote['!cols'] = [22,14,14,14,50,50,50,50,60].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsNote, 'Ưu nhược điểm');
+
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `HR_Review_${date}.xlsx`);
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────────
 render();
 </script>
 </body>

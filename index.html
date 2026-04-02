@@ -892,7 +892,21 @@ function initFromFirebase() {
     });
   }
 
-  if (!D._migrationV || D._migrationV < 4) { D._migrationV=4; migrated=true; }
+  // v5: chuẩn hoá phụ cấp ăn thành 520k cho tất cả (xe 300k giữ nguyên cho ai có)
+  if (!D._migrationV || D._migrationV < 5) {
+    const ALLOWANCE = {
+      'emp_0001':520000,  'emp_0002':820000,  'emp_0003':520000,  'emp_0004':820000,
+      'emp_0005':520000,  'emp_0006':820000,  'emp_0007':820000,  'emp_0008':820000,
+      'emp_0009':520000,  'emp_0010':520000,  'emp_0011':520000,  'emp_0012':820000,
+      'emp_0013':820000,  'emp_0014':520000,  'emp_0015':820000,  'emp_0016':520000,
+    };
+    D.employees.forEach(e=>{
+      const a=ALLOWANCE[e.id]; if(!a||!e.reviews?.length) return;
+      const r=e.reviews.find(r=>r.reviewDate==='2026-03-29')||e.reviews[0];
+      r.allowance=a; migrated=true;
+    });
+    D._migrationV=5; migrated=true;
+  }
   if (migrated) save();
   // ── END MIGRATION ──
 

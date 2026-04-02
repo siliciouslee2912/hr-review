@@ -839,6 +839,36 @@ document.getElementById('app').innerHTML = `<div class="empty"><div class="empty
 
 function initFromFirebase() {
   if (window._D) { D = window._D; window.D = D; }
+
+  // ── DATA MIGRATION ──
+  // v2: cập nhật avgCommission + allowance cho nhân sự TXS từ bảng lương thực tế
+  const MIGRATIONS = {
+    'emp_0009': {avgCommission:4802000, allowance:520000},
+    'emp_0010': {avgCommission:4006000, allowance:520000},
+    'emp_0011': {avgCommission:4615000, allowance:520000},
+    'emp_0012': {avgCommission:6289000, allowance:820000},
+    'emp_0013': {avgCommission:4564000, allowance:820000},
+    'emp_0014': {avgCommission:2346000, allowance:520000},
+    'emp_0015': {avgCommission:1787000, allowance:820000},
+    'emp_0016': {avgCommission:1990000, allowance:520000},
+  };
+  let migrated = false;
+  if (!D._migrationV || D._migrationV < 2) {
+    D.employees.forEach(e => {
+      const patch = MIGRATIONS[e.id];
+      if (patch && e.reviews && e.reviews.length > 0) {
+        // Update review ngày 2026-03-29 (đợt đầu tiên)
+        const r = e.reviews.find(r => r.reviewDate === '2026-03-29') || e.reviews[0];
+        r.avgCommission = patch.avgCommission;
+        r.allowance     = patch.allowance;
+        migrated = true;
+      }
+    });
+    D._migrationV = 2;
+    if (migrated) save();
+  }
+  // ── END MIGRATION ──
+
   render();
 }
 

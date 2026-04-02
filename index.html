@@ -749,92 +749,86 @@ function exportExcel(){
   const wb = XLSX.utils.book_new();
 
   // ── Sheet 1: Tổng hợp nhân sự ──
-  const sumHeader = ['Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc','Thâm niên (tháng)','Số đợt review','Lương CB mới nhất (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)'];
+  const sumHeader = [
+    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc',
+    'Ngày vào công ty','Thâm niên (tháng)',
+    'Số đợt review',
+    'Lương CB (11h) (đ)','Lương CB ca 8h (đ)','Lương giờ (đ)',
+    'HH/DV TB (đ)','DT BH TB 6th (đ)',
+    'Lương CB duyệt (đ)','Phụ cấp (đ)','Tổng quỹ lương (đ)'
+  ];
   const sumRows = D.employees.map(e=>{
     const r = latestRev(e);
+    const cb   = r?(r.currentBaseSalary||0):0;
+    const app  = r?(r.approvedSalary||0):0;
+    const comm = r?(r.avgCommission||0):0;
+    const alw  = r?(r.allowance||0):0;
+    const sen  = e.joinDate ? monthsFrom(e.joinDate) : (e.seniorityMonths||0);
     return [
       e.name||'',
       e.branch||'',
       e.position||'',
       e.dept||'',
       e.shift||'',
-      e.seniorityMonths||0,
+      e.joinDate||'',
+      sen,
       e.reviews?.length||0,
-      r?(r.approvedSalary||r.currentBaseSalary||0):0,
-      r?(r.avgCommission||0):0,
-      r?(r.avgSales6m||0):0
+      cb,
+      cb>0?Math.round(cb/11*8):0,
+      cb>0?Math.round(cb/26/11):0,
+      comm,
+      r?(r.avgSales6m||0):0,
+      app,
+      alw,
+      (app||cb)+comm+alw
     ];
   });
   const wsSum = XLSX.utils.aoa_to_sheet([sumHeader,...sumRows]);
-  // Column widths
-  wsSum['!cols'] = [22,14,14,14,14,10,10,18,18,18].map(w=>({wch:w}));
+  wsSum['!cols'] = [24,14,16,14,14,16,12,10,18,18,14,16,18,18,14,18].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, wsSum, 'Tổng hợp nhân sự');
 
-  // ── Sheet 2: Chi tiết đợt review ──
+  // ── Sheet 2: Chi tiết đợt review (mỗi dòng = 1 đợt) ──
   const revHeader = [
-    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca',
-    'Ngày review','Lương CB hiện tại (đ)','HH/DV TB (đ)','DT BH TB 6th (đ)',
-    'Đề xuất - NV (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
-    'Lương được duyệt (đ)','Ngày duyệt',
-    '✅ Ưu điểm','⚠️ Nhược điểm','🔍 Vấn đề nhận thấy','💭 Mong muốn NV','🚀 Kế hoạch hành động'
+    'Họ & Tên','Cơ sở','Chức danh','Phòng ban','Ca làm việc',
+    'Ngày vào công ty','Thâm niên (tháng)',
+    'Ngày review',
+    'Lương CB (11h) (đ)','Lương CB ca 8h (đ)','Lương giờ (đ)',
+    'HH/DV TB (đ)','DT BH TB 6th (đ)',
+    'Đề xuất - Nhân viên (đ)','Đề xuất - Quản lý (đ)','Đề xuất - Ban VH (đ)',
+    'Lương CB duyệt (đ)','Ngày duyệt','Phụ cấp (đ)','Tổng quỹ lương (đ)',
+    '✅ Ưu điểm','⚠️ Nhược điểm',
+    '🔍 Vấn đề nhận thấy','💭 Mong muốn NV','🚀 Kế hoạch hành động'
   ];
   const revRows = [];
   D.employees.forEach(e=>{
     const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
+    const sen  = e.joinDate ? monthsFrom(e.joinDate) : (e.seniorityMonths||0);
     revs.forEach(r=>{
-      const n = r.notes||{};
+      const n   = r.notes||{};
+      const cb  = r.currentBaseSalary||0;
+      const app = r.approvedSalary||0;
+      const comm= r.avgCommission||0;
+      const alw = r.allowance||0;
       revRows.push([
-        e.name||'',
-        e.branch||'',
-        e.position||'',
-        e.dept||'',
-        e.shift||'',
+        e.name||'', e.branch||'', e.position||'', e.dept||'', e.shift||'',
+        e.joinDate||'', sen,
         r.reviewDate||'',
-        r.currentBaseSalary||0,
-        r.avgCommission||0,
+        cb,
+        r.salary8h||(cb>0?Math.round(cb/11*8):0),
+        r.salaryHourly||(cb>0?Math.round(cb/26/11):0),
+        comm,
         r.avgSales6m||0,
-        r.empProposed||0,
-        r.mgrProposed||0,
-        r.opsProposed||0,
-        r.approvedSalary||0,
-        r.approvedDate||'',
-        n.pros||'',
-        n.cons||'',
-        n.managerJTBD||'',
-        n.employeeWish||'',
-        n.actionPlan||''
+        r.empProposed||0, r.mgrProposed||0, r.opsProposed||0,
+        app, r.approvedDate||'', alw,
+        (app||cb)+comm+alw,
+        n.pros||'', n.cons||'',
+        n.managerJTBD||'', n.employeeWish||'', n.actionPlan||''
       ]);
     });
   });
   const wsRev = XLSX.utils.aoa_to_sheet([revHeader,...revRows]);
-  wsRev['!cols'] = [22,14,14,14,12,14,18,16,18,18,18,16,18,14,40,40,40,40,50].map(w=>({wch:w}));
+  wsRev['!cols'] = [24,14,16,14,14,16,12,14,18,18,14,16,18,18,18,16,18,14,14,18,50,50,50,50,60].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, wsRev, 'Chi tiết review');
-
-  // ── Sheet 3: Ưu nhược điểm tổng hợp ──
-  const noteHeader = ['Họ & Tên','Cơ sở','Chức danh','Ngày review','✅ Ưu điểm','⚠️ Nhược điểm','🔍 Vấn đề nhận thấy','💭 Mong muốn NV','🚀 Kế hoạch hành động'];
-  const noteRows = [];
-  D.employees.forEach(e=>{
-    const revs = [...(e.reviews||[])].sort((a,b)=>new Date(b.reviewDate)-new Date(a.reviewDate));
-    revs.forEach(r=>{
-      const n = r.notes||{};
-      if(n.pros||n.cons||n.managerJTBD||n.employeeWish||n.actionPlan){
-        noteRows.push([
-          e.name||'',
-          e.branch||'',
-          e.position||'',
-          r.reviewDate||'',
-          n.pros||'',
-          n.cons||'',
-          n.managerJTBD||'',
-          n.employeeWish||'',
-          n.actionPlan||''
-        ]);
-      }
-    });
-  });
-  const wsNote = XLSX.utils.aoa_to_sheet([noteHeader,...noteRows]);
-  wsNote['!cols'] = [22,14,14,14,50,50,50,50,60].map(w=>({wch:w}));
-  XLSX.utils.book_append_sheet(wb, wsNote, 'Ưu nhược điểm');
 
   const date = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `HR_Review_${date}.xlsx`);

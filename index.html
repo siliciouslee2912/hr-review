@@ -879,7 +879,20 @@ function initFromFirebase() {
     });
   }
 
-  if (!D._migrationV || D._migrationV < 3) { D._migrationV=3; migrated=true; }
+  // v4: Hà Đông - lương dịch vụ + phụ cấp
+  if (!D._migrationV || D._migrationV < 4) {
+    const HD = {
+      'emp_0006':{avgCommission:1987000, allowance:240000+300000},  // Quỳnh Anh: ăn 240k + xe 300k
+      'emp_0008':{avgCommission:3020000, allowance:340000+300000},  // Tú Anh: ăn 340k + xe 300k
+    };
+    D.employees.forEach(e=>{
+      const p=HD[e.id]; if(!p||!e.reviews?.length) return;
+      const r=e.reviews.find(r=>r.reviewDate==='2026-03-29')||e.reviews[0];
+      r.avgCommission=p.avgCommission; r.allowance=p.allowance; migrated=true;
+    });
+  }
+
+  if (!D._migrationV || D._migrationV < 4) { D._migrationV=4; migrated=true; }
   if (migrated) save();
   // ── END MIGRATION ──
 

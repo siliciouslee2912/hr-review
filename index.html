@@ -841,32 +841,46 @@ function initFromFirebase() {
   if (window._D) { D = window._D; window.D = D; }
 
   // ── DATA MIGRATION ──
-  // v2: cập nhật avgCommission + allowance cho nhân sự TXS từ bảng lương thực tế
-  const MIGRATIONS = {
-    'emp_0009': {avgCommission:4802000, allowance:520000},
-    'emp_0010': {avgCommission:4006000, allowance:520000},
-    'emp_0011': {avgCommission:4615000, allowance:520000},
-    'emp_0012': {avgCommission:6289000, allowance:820000},
-    'emp_0013': {avgCommission:4564000, allowance:820000},
-    'emp_0014': {avgCommission:2346000, allowance:520000},
-    'emp_0015': {avgCommission:1787000, allowance:820000},
-    'emp_0016': {avgCommission:1990000, allowance:520000},
-  };
   let migrated = false;
+
+  // v2: TXS - lương dịch vụ + phụ cấp
   if (!D._migrationV || D._migrationV < 2) {
-    D.employees.forEach(e => {
-      const patch = MIGRATIONS[e.id];
-      if (patch && e.reviews && e.reviews.length > 0) {
-        // Update review ngày 2026-03-29 (đợt đầu tiên)
-        const r = e.reviews.find(r => r.reviewDate === '2026-03-29') || e.reviews[0];
-        r.avgCommission = patch.avgCommission;
-        r.allowance     = patch.allowance;
-        migrated = true;
-      }
+    const TXS = {
+      'emp_0009':{avgCommission:4802000,allowance:520000},
+      'emp_0010':{avgCommission:4006000,allowance:520000},
+      'emp_0011':{avgCommission:4615000,allowance:520000},
+      'emp_0012':{avgCommission:6289000,allowance:820000},
+      'emp_0013':{avgCommission:4564000,allowance:820000},
+      'emp_0014':{avgCommission:2346000,allowance:520000},
+      'emp_0015':{avgCommission:1787000,allowance:820000},
+      'emp_0016':{avgCommission:1990000,allowance:520000},
+    };
+    D.employees.forEach(e=>{
+      const p=TXS[e.id]; if(!p||!e.reviews?.length) return;
+      const r=e.reviews.find(r=>r.reviewDate==='2026-03-29')||e.reviews[0];
+      r.avgCommission=p.avgCommission; r.allowance=p.allowance; migrated=true;
     });
-    D._migrationV = 2;
-    if (migrated) save();
   }
+
+  // v3: Quan Hoa - lương dịch vụ + phụ cấp
+  if (!D._migrationV || D._migrationV < 3) {
+    const QH = {
+      'emp_0001':{avgCommission:2421000,allowance:520000},
+      'emp_0002':{avgCommission:3400000,allowance:880000},
+      'emp_0003':{avgCommission:2658000,allowance:540000},
+      'emp_0004':{avgCommission:3185000,allowance:880000},
+      'emp_0005':{avgCommission:3622000,allowance:560000},
+      'emp_0007':{avgCommission:3347000,allowance:900000},
+    };
+    D.employees.forEach(e=>{
+      const p=QH[e.id]; if(!p||!e.reviews?.length) return;
+      const r=e.reviews.find(r=>r.reviewDate==='2026-03-29')||e.reviews[0];
+      r.avgCommission=p.avgCommission; r.allowance=p.allowance; migrated=true;
+    });
+  }
+
+  if (!D._migrationV || D._migrationV < 3) { D._migrationV=3; migrated=true; }
+  if (migrated) save();
   // ── END MIGRATION ──
 
   render();

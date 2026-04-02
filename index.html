@@ -398,6 +398,55 @@ function renderDash(){
       <button class="btn btn-secondary btn-sm" onclick="updRev()">Cập nhật</button>
       ${rev?`<span style="font-size:11.5px;color:var(--t3)">${fm(rev)}</span>`:''}
     </div>
+
+    ${emps.length?`
+    <!-- ── TỈ LỆ QUỸ LƯƠNG ── -->
+    <div class="card" style="margin-bottom:18px">
+      <div class="card-title">📊 Tỉ lệ quỹ lương / Doanh thu</div>
+
+      <!-- TỔNG CÔNG TY -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:8px">Toàn công ty</div>
+        ${rev?`
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+              <span style="font-size:12px;color:var(--t2)">Quỹ lương: <span class="money">${fm(totalPayBefore)}</span></span>
+              <span style="font-size:14px;font-weight:800;color:${(totalPayBefore/rev*100)>40?'var(--red)':(totalPayBefore/rev*100)>25?'var(--acc)':'var(--green)'}">${(totalPayBefore/rev*100).toFixed(1)}%</span>
+            </div>
+            <div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(totalPayBefore/rev*100,100)}%;background:${(totalPayBefore/rev*100)>40?'var(--red)':(totalPayBefore/rev*100)>25?'var(--acc)':'var(--green)'}"></div></div>
+          </div>
+        </div>`:`<div style="font-size:12px;color:var(--t3)">Chưa nhập doanh thu công ty</div>`}
+      </div>
+
+      <!-- TỪNG CƠ SỞ -->
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:10px">Theo từng cơ sở</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${branches.map(([n,d])=>{
+          const branchRev = D.company['rev_'+n]||0;
+          const branchPay = d.current+d.comm+d.allowance;
+          const branchRatio = branchRev>0?(branchPay/branchRev*100):null;
+          const color = branchRatio===null?'var(--t3)':branchRatio>40?'var(--red)':branchRatio>25?'var(--acc)':'var(--green)';
+          return `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:12px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="badge ${branchBadge(n)}">${n}</span>
+                <span style="font-size:11.5px;color:var(--t2)">${d.count} người · Quỹ lương: <span class="money">${fm(branchPay)}</span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input type="number" placeholder="Doanh thu ${n}" value="${branchRev||''}"
+                  style="width:170px;padding:5px 9px;font-size:12px;background:var(--s3);border:1px solid var(--bd);border-radius:6px;color:var(--t1);font-family:inherit"
+                  oninput="updBranchRev('${n}',this.value)">
+                ${branchRatio!==null?`<span style="font-size:16px;font-weight:800;color:${color};min-width:52px;text-align:right">${branchRatio.toFixed(1)}%</span>`:`<span style="font-size:12px;color:var(--t3);min-width:52px;text-align:right">—</span>`}
+              </div>
+            </div>
+            ${branchRatio!==null?`<div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(branchRatio,100)}%;background:${color}"></div></div>
+            <div class="rbar-labels"><span>0%</span><span>25%</span><span>40%</span><span>100%</span></div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    `:''}
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-lbl">Tổng nhân sự</div><div class="stat-val c-blue">${emps.length}</div><div class="stat-sub">Đang hoạt động</div></div>
       <div class="stat-card"><div class="stat-lbl">Tổng lương cơ bản</div><div class="stat-val c-acc">${fms(totalBasic)}</div><div class="stat-sub">${fm(totalBasic)}</div></div>
@@ -405,7 +454,6 @@ function renderDash(){
       <div class="stat-card"><div class="stat-lbl">Tổng quỹ lương</div><div class="stat-val c-green">${fms(totalPay)}</div><div class="stat-sub">${fm(totalPay)}</div></div>
       <div class="stat-card"><div class="stat-lbl">DT bán hàng TB 6th</div><div class="stat-val c-teal">${fms(totalSales)}</div><div class="stat-sub">Toàn công ty</div></div>
       ${emps.length?`<div class="stat-card"><div class="stat-lbl">Lương CB TB / người</div><div class="stat-val c-ora">${fms(Math.round(totalBasic/emps.length))}</div><div class="stat-sub">Bình quân</div></div>`:''}
-      ${ratio!==null?`<div class="stat-card" style="grid-column:1/-1"><div class="stat-lbl">Tỉ lệ Quỹ lương / Doanh thu</div><div class="stat-val ${+ratio>40?'c-red':+ratio>25?'c-acc':'c-green'}">${ratio}%</div><div class="rbar-bg"><div class="rbar-fill" style="width:${Math.min(+ratio,100)}%;background:${+ratio>40?'var(--red)':+ratio>25?'var(--acc)':'var(--green)'}"></div></div><div class="rbar-labels"><span>0%</span><span>25%</span><span>50%</span><span>100%</span></div></div>`:''}
     </div>
 
     ${emps.length?`
@@ -507,6 +555,7 @@ function renderDash(){
   if(emps.length) setTimeout(()=>drawCharts(branches,totalBasic,totalComm),60);
 }
 function updRev(){ D.company.revenue=parseFloat(document.getElementById('rev-input').value)||0; save(); renderDash(); }
+function updBranchRev(branch,val){ D.company['rev_'+branch]=parseFloat(val)||0; save(); }
 function drawCharts(branches,totalBasic,totalComm){
   const bCtx=document.getElementById('ch-branch');
   if(bCtx) new Chart(bCtx,{type:'bar',data:{labels:branches.map(([n])=>n),datasets:[{label:'Lương CB',data:branches.map(([,d])=>d.basic),backgroundColor:'rgba(212,160,23,.75)',borderRadius:4},{label:'HH/DV',data:branches.map(([,d])=>d.comm),backgroundColor:'rgba(56,139,253,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b949e',font:{family:'Be Vietnam Pro',size:11}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fms(c.raw)}`}}},scales:{x:{stacked:true,ticks:{color:'#8b949e'},grid:{color:'#21262d'}},y:{stacked:true,ticks:{color:'#8b949e',callback:v=>fms(v)},grid:{color:'#21262d'}}}}});

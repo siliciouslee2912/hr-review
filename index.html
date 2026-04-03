@@ -220,6 +220,10 @@ function nav(v,params={}){
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   const m={dashboard:'nav-dashboard',employees:'nav-employees','emp-detail':'nav-employees'};
   const el=document.getElementById(m[v]); if(el) el.classList.add('active');
+  // Lưu vị trí hiện tại vào sessionStorage
+  sessionStorage.setItem('hr_view', v);
+  if(params.empId) sessionStorage.setItem('hr_emp', params.empId);
+  else if(v!=='emp-detail') sessionStorage.removeItem('hr_emp');
   render();
 }
 function render(){
@@ -966,6 +970,14 @@ function initFromFirebase() {
   }
   if (migrated) save();
   // ── END MIGRATION ──
+
+  // Khôi phục vị trí trang trước khi reload
+  const savedView = sessionStorage.getItem('hr_view');
+  const savedEmp  = sessionStorage.getItem('hr_emp');
+  if (savedView) {
+    view = savedView;
+    if (savedEmp) selEmp = savedEmp;
+  }
 
   render();
 }
